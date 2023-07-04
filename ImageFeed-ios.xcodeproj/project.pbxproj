@@ -7,19 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D59D377E2A53F95E005F79CC /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59D377D2A53F95E005F79CC /* UIColor+Extensions.swift */; };
 		D5D9C9982A52B83E00765731 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5D9C9972A52B83E00765731 /* AppDelegate.swift */; };
 		D5D9C99A2A52B83E00765731 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5D9C9992A52B83E00765731 /* SceneDelegate.swift */; };
-		D5D9C99C2A52B83E00765731 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5D9C99B2A52B83E00765731 /* ViewController.swift */; };
+		D5D9C99C2A52B83E00765731 /* ImagesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5D9C99B2A52B83E00765731 /* ImagesListViewController.swift */; };
 		D5D9C99F2A52B83E00765731 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D5D9C99D2A52B83E00765731 /* Main.storyboard */; };
 		D5D9C9A12A52B83F00765731 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D5D9C9A02A52B83F00765731 /* Assets.xcassets */; };
 		D5D9C9A42A52B83F00765731 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D5D9C9A22A52B83F00765731 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D59D377D2A53F95E005F79CC /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
 		D5D9C9942A52B83E00765731 /* ImageFeed-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ImageFeed-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5D9C9972A52B83E00765731 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D5D9C9992A52B83E00765731 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		D5D9C99B2A52B83E00765731 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		D5D9C99B2A52B83E00765731 /* ImagesListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListViewController.swift; sourceTree = "<group>"; };
 		D5D9C99E2A52B83E00765731 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D5D9C9A02A52B83F00765731 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D5D9C9A32A52B83F00765731 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -37,6 +39,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D59D377C2A53F946005F79CC /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				D59D377D2A53F95E005F79CC /* UIColor+Extensions.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		D5D9C98B2A52B83E00765731 = {
 			isa = PBXGroup;
 			children = (
@@ -56,9 +66,10 @@
 		D5D9C9962A52B83E00765731 /* ImageFeed-ios */ = {
 			isa = PBXGroup;
 			children = (
+				D59D377C2A53F946005F79CC /* Helpers */,
 				D5D9C9972A52B83E00765731 /* AppDelegate.swift */,
 				D5D9C9992A52B83E00765731 /* SceneDelegate.swift */,
-				D5D9C99B2A52B83E00765731 /* ViewController.swift */,
+				D5D9C99B2A52B83E00765731 /* ImagesListViewController.swift */,
 				D5D9C99D2A52B83E00765731 /* Main.storyboard */,
 				D5D9C9A02A52B83F00765731 /* Assets.xcassets */,
 				D5D9C9A22A52B83F00765731 /* LaunchScreen.storyboard */,
@@ -138,9 +149,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D5D9C99C2A52B83E00765731 /* ViewController.swift in Sources */,
+				D5D9C99C2A52B83E00765731 /* ImagesListViewController.swift in Sources */,
 				D5D9C9982A52B83E00765731 /* AppDelegate.swift in Sources */,
 				D5D9C99A2A52B83E00765731 /* SceneDelegate.swift in Sources */,
+				D59D377E2A53F95E005F79CC /* UIColor+Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
