@@ -61,7 +61,7 @@ extension ImagesListViewController {
     
     private func gradientBackGroundFor(_ label: UILabel) {
         let colorTop = UIColor(red: 26, green: 27, blue: 34, alpha: 0.1)
-        let colorBottom = UIColor(red: 246, green: 27, blue: 34, alpha: 0.2)
+        let colorBottom = UIColor(red: 26, green: 27, blue: 34, alpha: 0.2)
         
         let backgroundLayer = CAGradientLayer()
         backgroundLayer.colors = [colorTop.cgColor, colorBottom.cgColor]
