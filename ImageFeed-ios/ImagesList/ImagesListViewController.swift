@@ -7,12 +7,15 @@
 
 import UIKit
 
-class ImagesListViewController: UIViewController {
+final class ImagesListViewController: UIViewController {
 
-    @IBOutlet private var tableView: UITableView!
+    //MARK: - Outltes
+    @IBOutlet private weak var tableView: UITableView!
     
+    //MARK: - Variables
     private let photosName: [String] = Array(0..<20).map{ "\($0)" }
     
+    //MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -20,8 +23,8 @@ class ImagesListViewController: UIViewController {
     }
 }
 
+//MARK: - UITableViewDataSource
 extension ImagesListViewController: UITableViewDataSource {
-    /// определяет количество ячеек в секции таблицы
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return photosName.count
     }
@@ -34,53 +37,15 @@ extension ImagesListViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        configCell(for: imageListCell, with: indexPath)
+        imageListCell.configCell(using: photosName[indexPath.row], with: indexPath)
+        
         return imageListCell
     }
 }
 
-extension ImagesListViewController {
-    /// Метод для настройки ячейки
-    private func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
-        gradientBackGroundFor(cell.backgroundLabel)
-        
-        guard let image = UIImage(named: photosName[indexPath.row]) else {
-            return
-        }
-        
-        cell.cellImage.image = image
-        cell.dateLabel.text = Date().dateTimeString
-        
-        let likeImageText = indexPath.row % 2 == 1 ? "Active" : "No Active"
-        guard let likeImage = UIImage(named: likeImageText) else {
-            return
-        }
-        cell.likeButton.setImage(likeImage, for: .normal)
-    }
-    
-    private func gradientBackGroundFor(_ label: UILabel) {
-        let colorTop = UIColor(red: 26, green: 27, blue: 34, alpha: 0.0)
-        let colorBottom = UIColor(red: 26, green: 27, blue: 34, alpha: 0.1)
-        
-        let backgroundLayer = CAGradientLayer()
-        backgroundLayer.frame = view.bounds
-        backgroundLayer.colors = [colorTop.cgColor, colorBottom.cgColor]
-        backgroundLayer.locations = [0.0, 1]
-        backgroundLayer.startPoint = CGPoint(x: 1.0, y: 1.0)
-        backgroundLayer.endPoint = CGPoint(x: 0.0, y: 0.0)
-        
-        label.backgroundColor = UIColor.clear
-        
-        label.layer.insertSublayer(backgroundLayer, at: 0)
-        label.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-    }
-}
-
+//MARK: - UITableViewDelegate
 extension ImagesListViewController: UITableViewDelegate {
-    /// Отвечает за действия, которые будут выполнены при тапе по ячейке таблицы. «Адрес» ячейки, который содержится в indexPath, передаётся в качестве аргумента.
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) { }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         guard let image = UIImage(named: photosName[indexPath.row]) else {
