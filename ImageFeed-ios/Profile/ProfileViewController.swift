@@ -9,14 +9,14 @@ import UIKit
 
 final class ProfileViewController: UIViewController {
     //MARK: - Outltes
-    @IBOutlet weak var avatarImageview: UIImageView!
-    @IBOutlet weak var descriptionLabel: UILabel!
-    @IBOutlet weak var loginNameLabel: UILabel!
-    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet private weak var avatarImageview: UIImageView!
+    @IBOutlet private weak var descriptionLabel: UILabel!
+    @IBOutlet private weak var loginNameLabel: UILabel!
+    @IBOutlet private weak var nameLabel: UILabel!
     
-    @IBOutlet weak var logOutButton: UIButton!
+    @IBOutlet private weak var logOutButton: UIButton!
     
     //MARK: - Actions
-    @IBAction func didTapLogOut() {
+    @IBAction private func didTapLogOut() {
     }
 }
