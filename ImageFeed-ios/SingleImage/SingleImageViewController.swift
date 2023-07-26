@@ -10,6 +10,12 @@ import UIKit
 final class SingleImageViewController: UIViewController {
     //MARK: - Outltes
     @IBOutlet weak var singleImageView: UIImageView!
+    @IBOutlet private weak var backButton: UIButton!
+    
+    //MARK: - Actions
+    @IBAction private func didTapBackButton() {
+        dismiss(animated: true, completion: nil)
+    }
     
     //MARK: - Variables
     var image: UIImage! {
