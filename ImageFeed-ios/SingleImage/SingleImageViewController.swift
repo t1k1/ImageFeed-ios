@@ -20,7 +20,7 @@ final class SingleImageViewController: UIViewController {
     }
     
     @IBAction private func didTapShareButton() {
-        share(item: image)
+        present(activityController, animated: true, completion: nil)
     }
     
     //MARK: - Variables
@@ -32,6 +32,8 @@ final class SingleImageViewController: UIViewController {
         }
     }
     
+    private var activityController = UIActivityViewController(activityItems: [], applicationActivities: nil)
+    
     //MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,6 +43,8 @@ final class SingleImageViewController: UIViewController {
         
         singleImageView.image = image
         rescaleAndCenterImageInScrollView()
+        
+        activityController = UIActivityViewController(activityItems: [image as Any], applicationActivities: nil)
     }
     
     override func viewDidLayoutSubviews() {
@@ -70,12 +74,5 @@ private extension SingleImageViewController {
         let halfWidth = (scrollView.bounds.size.width - singleImageView.frame.size.width) / 2
         let halfHeight = (scrollView.bounds.size.height - singleImageView.frame.size.height) / 2
         scrollView.contentInset = .init(top: halfHeight, left: halfWidth, bottom: 0, right: 0)
-    }
-    
-    func share(item: Any?) {
-        guard let item = item else { return }
-        
-        let activityController = UIActivityViewController(activityItems: [item], applicationActivities: nil)
-        present(activityController, animated: true, completion: nil)
     }
 }
