@@ -8,76 +8,40 @@
 import UIKit
 
 final class ProfileViewController: UIViewController {
-    //MARK: - Life cycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        makeUpView()
-    }
-}
-
-extension ProfileViewController {
-    private func makeUpView() {
-        let imageView = makeUpImageView(image: UIImage(named: "Avatar mock") ?? UIImage(systemName: "person.crop.circle.fill"))
-        let labels = makeUpLabels()
-        guard let descriptionLabel = labels["descriptionLabel"],
-              let loginNameLabel = labels["loginNameLabel"],
-              let nameLabel = labels["nameLabel"] else {
-            return
-        }
-        let button = makeUpButton()
-        
-        view.addSubview(imageView)
-        view.addSubview(descriptionLabel)
-        view.addSubview(loginNameLabel)
-        view.addSubview(nameLabel)
-        view.addSubview(button)
-        
-        addAndActivateConstraints(avatarImageView: imageView,
-                            descriptionLabel: descriptionLabel,
-                            loginNameLabel: loginNameLabel,
-                            nameLabel: nameLabel,
-                            logOutButton: button)
-    }
     
-    private func makeUpImageView(image: UIImage?) -> UIImageView {
-        let profileImageView = UIImageView(image: image)
-        profileImageView.translatesAutoresizingMaskIntoConstraints = false
+    //MARK: - Variables
+    private let descriptionLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Hello, world!"
+        label.font = .systemFont(ofSize: 13, weight: .regular)
+        label.textColor = .ypWhite
         
-        return profileImageView
-    }
-    
-    private func makeUpLabels() -> [String: UILabel] {
-        let descriptionLabel = UILabel()
-        let loginNameLabel = UILabel()
-        let nameLabel = UILabel()
+        return label
+    }()
+    private let loginNameLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "@ekaterina_nov"
+        label.font = .systemFont(ofSize: 13, weight: .regular)
+        label.textColor = .ypGray
         
-        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
-        descriptionLabel.text = "Hello, world!"
-        descriptionLabel.font = .systemFont(ofSize: 13, weight: .regular)
-        descriptionLabel.textColor = .ypWhite
+        return label
+    }()
+    private let nameLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Екатерина Новикова"
+        label.font = .systemFont(ofSize: 23, weight: .bold)
+        label.textColor = .ypWhite
         
-        loginNameLabel.translatesAutoresizingMaskIntoConstraints = false
-        loginNameLabel.text = "@ekaterina_nov"
-        loginNameLabel.font = .systemFont(ofSize: 13, weight: .regular)
-        loginNameLabel.textColor = .ypGray
-        
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        nameLabel.text = "Екатерина Новикова"
-        nameLabel.font = .systemFont(ofSize: 23, weight: .bold)
-        nameLabel.textColor = .ypWhite
-        
-        return [
-            "descriptionLabel": descriptionLabel,
-            "loginNameLabel": loginNameLabel,
-            "nameLabel": nameLabel
-        ]
-    }
-    
-    private func makeUpButton() -> UIButton {
+        return label
+    }()
+    private let logOutButton: UIButton = {
         let image = UIImage(named: "logout_image") ?? UIImage(systemName: "ipad.and.arrow.forward")!
         
         let button = UIButton(type: .custom)
+        button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(image, for: .normal)
         
         if #available(iOS 14.0, *) {
@@ -86,23 +50,40 @@ extension ProfileViewController {
             }
             button.addAction(logOutAction, for: .touchUpInside)
         } else {
-            button.addTarget(self, action: #selector(didTapButton), for: .touchUpInside)
+            button.addTarget(ProfileViewController.self,
+                             action: #selector(didTapButton),
+                             for: .touchUpInside)
         }
-        button.translatesAutoresizingMaskIntoConstraints = false
         
         return button
+    }()
+    private let avatarImageView: UIImageView = {
+        let imageView = UIImageView(image: UIImage(named: "Avatar mock") ?? UIImage(systemName: "person.crop.circle.fill"))
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        return imageView
+    }()
+    
+    //MARK: - Life cycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        addSubViews()
+        configureConstraints()
     }
+}
 
-    @objc private func didTapButton() {
-        // Выход из профиля
+//MARK: - Functions
+extension ProfileViewController {
+    private func addSubViews() {
+        view.addSubview(avatarImageView)
+        view.addSubview(descriptionLabel)
+        view.addSubview(loginNameLabel)
+        view.addSubview(nameLabel)
+        view.addSubview(logOutButton)
     }
     
-    private func addAndActivateConstraints(avatarImageView: UIImageView,
-                                     descriptionLabel: UILabel,
-                                     loginNameLabel: UILabel,
-                                     nameLabel: UILabel,
-                                     logOutButton: UIButton) {
-        
+    private func configureConstraints() {
         NSLayoutConstraint.activate([
             avatarImageView.widthAnchor.constraint(equalToConstant: 70),
             avatarImageView.heightAnchor.constraint(equalToConstant: 70),
@@ -119,10 +100,14 @@ extension ProfileViewController {
             
             loginNameLabel.leadingAnchor.constraint(equalTo: avatarImageView.leadingAnchor),
             loginNameLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8),
-
+            
             descriptionLabel.leadingAnchor.constraint(equalTo: avatarImageView.leadingAnchor),
             descriptionLabel.topAnchor.constraint(equalTo: loginNameLabel.bottomAnchor, constant: 8)
-
+            
         ])
+    }
+    
+    @objc private func didTapButton() {
+        // Выход из профиля
     }
 }
