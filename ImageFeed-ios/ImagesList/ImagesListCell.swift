@@ -38,8 +38,10 @@ extension ImagesListCell {
     }
     
     private func gradientBackGroundFor(_ label: UILabel) {
+        if label.layer.sublayers?.count ?? 0 > 0 { return }
+        
         let colorTop = UIColor(red: 26, green: 27, blue: 34, alpha: 0.0)
-        let colorBottom = UIColor(red: 26, green: 27, blue: 34, alpha: 0.1)
+        let colorBottom = UIColor(red: 26, green: 27, blue: 34, alpha: 0.2)
         
         let backgroundLayer = CAGradientLayer()
         backgroundLayer.frame = label.bounds
