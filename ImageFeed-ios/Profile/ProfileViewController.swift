@@ -107,7 +107,8 @@ extension ProfileViewController {
         ])
     }
     
-    @objc private func didTapButton() {
+    @objc
+    private func didTapButton() {
         // Выход из профиля
     }
 }

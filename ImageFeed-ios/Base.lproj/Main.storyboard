@@ -327,19 +327,27 @@
                                     <action selector="didTapBackButton" destination="IHp-Bk-mNI" eventType="touchUpInside" id="Rkq-Nc-Jgs"/>
                                 </connections>
                             </button>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Eda-I1-mfd">
+                                <rect key="frame" x="0.0" y="33" width="393" height="4"/>
+                                <color key="tintColor" name="YP Black"/>
+                            </progressView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="RGd-7b-ryk"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="Eda-I1-mfd" firstAttribute="leading" secondItem="Vea-3m-fUa" secondAttribute="leading" id="0B5-6q-Z76"/>
                             <constraint firstAttribute="trailing" secondItem="5mB-l2-J6N" secondAttribute="trailing" id="9aR-Yl-hnn"/>
                             <constraint firstItem="1Ml-YY-b0h" firstAttribute="top" secondItem="RGd-7b-ryk" secondAttribute="top" constant="9" id="EgO-FY-Lkc"/>
                             <constraint firstItem="5mB-l2-J6N" firstAttribute="leading" secondItem="Vea-3m-fUa" secondAttribute="leading" id="OoI-Mu-WhD"/>
                             <constraint firstAttribute="bottom" secondItem="5mB-l2-J6N" secondAttribute="bottom" id="dbn-6Y-RUA"/>
                             <constraint firstItem="5mB-l2-J6N" firstAttribute="top" secondItem="Vea-3m-fUa" secondAttribute="top" id="koF-Jc-sZ9"/>
+                            <constraint firstAttribute="trailing" secondItem="Eda-I1-mfd" secondAttribute="trailing" id="mZv-bV-uFa"/>
                             <constraint firstItem="1Ml-YY-b0h" firstAttribute="leading" secondItem="RGd-7b-ryk" secondAttribute="leading" constant="9" id="mnD-f8-Ybb"/>
+                            <constraint firstItem="Eda-I1-mfd" firstAttribute="top" secondItem="1Ml-YY-b0h" secondAttribute="bottom" id="vyQ-se-pbt"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="progressView" destination="Eda-I1-mfd" id="mFk-0U-SOg"/>
                         <outlet property="webView" destination="5mB-l2-J6N" id="Rux-5a-Bir"/>
                     </connections>
                 </viewController>
