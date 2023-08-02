@@ -12,3 +12,4 @@ let SecretKey = "jpku-lNgG5f4NhQRUeMN-N9Lh1GttigbrKR6n5ykxLQ"
 let RedirectURI = "urn:ietf:wg:oauth:2.0:oob"
 let AccessScope = "public+read_user+write_likes"
 let DefaultBaseURL = URL(string: "https://api.unsplash.com/")!
+let UnsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
