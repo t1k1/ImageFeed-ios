@@ -15,7 +15,7 @@ final class WebViewViewController: UIViewController {
     
     //MARK: - Actions
     @IBAction func didTapBackButton() {
-        
+        delegate?.webViewViewControllerDidCancel(self)
     }
     
     //MARK: - Variables
@@ -66,17 +66,14 @@ extension WebViewViewController: WKNavigationDelegate {
         decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
     ) {
         if let code = code(from: navigationAction) {
-            //TODO: process code
+            delegate?.webViewViewController(self, didAuthenticateWithCode: code)
             decisionHandler(.cancel)
         } else {
             decisionHandler(.allow)
         }
     }
-}
-
-//MARK: - Functions
-private extension WebViewViewController {
-    func code(from navigationAction: WKNavigationAction) -> String? {
+    
+    private func code(from navigationAction: WKNavigationAction) -> String? {
         if let url = navigationAction.request.url,
            let urlComponents = URLComponents(string: url.absoluteString),
            urlComponents.path == "/oauth/authorize/native",
