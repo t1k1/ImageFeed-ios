@@ -100,20 +100,6 @@ private extension OAuth2Service {
         )
     }
     
-    //    /// Вспомогательная функция для получения авторизационного токена
-    //    func authTokenRequest(code: String) -> URLRequest {
-    //        URLRequest.makeHTTPRequest(
-    //            path: "/oauth/token"
-    //            + "?client_id=\(AccessKey)"
-    //            + "&&client_secret=\(SecretKey)"
-    //            + "&&redirect_uri=\(RedirectURI)"
-    //            + "&&code=\(code)"
-    //            + "&&grant_type=authorization_code",
-    //            httpMethod: "POST",
-    //            host: "unsplash.com"
-    //        )
-    //    }
-    
     /// Вспомогательная функция для получения авторизационного токена
     func authTokenRequest(code: String) -> URLRequest {
         URLRequest.makeHTTPRequest(

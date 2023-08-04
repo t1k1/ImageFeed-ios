@@ -10,8 +10,7 @@ import UIKit
 final class AuthViewController: UIViewController {
     //MARK: - Variables
     private let ShowWebViewSegueIdentifier = "ShowWebView"
-    private let oauth2Service = OAuth2Service()
-    private let oauth2TokenStorage = OAuth2TokenStorage()
+    weak var delegate: AuthViewControllerDelegate?
     
     //MARK: - Lyfe cycle
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -29,15 +28,7 @@ final class AuthViewController: UIViewController {
 //MARK: - WebViewViewControllerDelegate
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
-        oauth2Service.fetchAuthToken(code) { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-                case .success:
-                    print("!sucsess key = " + (oauth2TokenStorage.token ?? "no token"))
-                case .failure:
-                    print("!failure NO TOKEN")
-            }
-        }
+        delegate?.authViewController(self, didAuthenticateWithCode: code)
     }
     
     func webViewViewControllerDidCancel(_ vc: WebViewViewController) {

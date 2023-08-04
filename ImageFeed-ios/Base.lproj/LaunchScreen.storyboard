@@ -18,16 +18,18 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchScreen" translatesAutoresizingMaskIntoConstraints="NO" id="Wl8-r3-IyU">
-                                <rect key="frame" x="159" y="388" width="75" height="78"/>
+                                <rect key="frame" x="159.66666666666666" y="400.66666666666669" width="74" height="76"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="76" id="H7X-Ox-0ED"/>
+                                    <constraint firstAttribute="width" constant="74" id="rzB-8R-IjI"/>
+                                </constraints>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" name="YP Black"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Wl8-r3-IyU" secondAttribute="trailing" constant="159" id="0ZM-4j-wil"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Wl8-r3-IyU" secondAttribute="bottom" constant="352" id="NaT-xA-2tT"/>
-                            <constraint firstItem="Wl8-r3-IyU" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="159" id="Ue0-ex-mPj"/>
-                            <constraint firstItem="Wl8-r3-IyU" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="329" id="kRa-qs-zxJ"/>
+                            <constraint firstItem="Wl8-r3-IyU" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="jbQ-vA-lrh"/>
+                            <constraint firstItem="Wl8-r3-IyU" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="s62-SE-6VT"/>
                         </constraints>
                     </view>
                 </viewController>
