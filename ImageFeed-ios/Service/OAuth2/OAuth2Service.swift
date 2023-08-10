@@ -30,7 +30,9 @@ final class OAuth2Service {
         _ code: String,
         complition: @escaping (Result<String,Error>) -> Void
     ) {
-        let request = authTokenRequest(code: code)
+        guard let request = authTokenRequest(code: code) else {
+            return
+        }
         let task = object(for: request) { [weak self] result in
             guard let self = self else { return }
             
@@ -67,12 +69,12 @@ private extension OAuth2Service {
     }
     
     // Вспомогательная функция для получения своего профиля
-    var selfProfileRequest: URLRequest {
+    var selfProfileRequest: URLRequest? {
         URLRequest.makeHTTPRequest(path: "/me", httpMethod: "GET")
     }
     
     /// Вспомогательная функция для получения картинки профиля
-    func profileImageURLRequest(userName: String) -> URLRequest {
+    func profileImageURLRequest(userName: String) -> URLRequest? {
         URLRequest.makeHTTPRequest(
             path: "/users/\(userName)",
             httpMethod: "GET"
@@ -80,7 +82,7 @@ private extension OAuth2Service {
     }
     
     /// Вспомогательная функция для получения картинок
-    func photosRequest(page: Int, perPage: Int) -> URLRequest {
+    func photosRequest(page: Int, perPage: Int) -> URLRequest? {
         URLRequest.makeHTTPRequest(
             path: "/photos"
             + "?page=\(page)"
@@ -90,7 +92,7 @@ private extension OAuth2Service {
     }
     
     /// Вспомогательная функция для получения лайкнутых картинок
-    func likeRequest(photoId: String) -> URLRequest {
+    func likeRequest(photoId: String) -> URLRequest? {
         URLRequest.makeHTTPRequest(
             path: "/photos/\(photoId)/like",
             httpMethod: "POST"
@@ -98,7 +100,7 @@ private extension OAuth2Service {
     }
     
     /// Вспомогательная функция для получения не лайкнутых картинок
-    func unlikeRequest(photoId: String) -> URLRequest {
+    func unlikeRequest(photoId: String) -> URLRequest? {
         URLRequest.makeHTTPRequest(
             path: "/photos/\(photoId)/like",
             httpMethod: "DELETE"
@@ -106,7 +108,7 @@ private extension OAuth2Service {
     }
     
     /// Вспомогательная функция для получения авторизационного токена
-    func authTokenRequest(code: String) -> URLRequest {
+    func authTokenRequest(code: String) -> URLRequest? {
         URLRequest.makeHTTPRequest(
             path: "/oauth/token"
             + "?client_id=\(AccessKey)"
@@ -115,7 +117,7 @@ private extension OAuth2Service {
             + "&&code=\(code)"
             + "&&grant_type=authorization_code",
             httpMethod: "POST",
-            baseURL: URL(string: "https://unsplash.com")!
+            baseURL: URL(string: "https://unsplash.com")
         )
     }
     
