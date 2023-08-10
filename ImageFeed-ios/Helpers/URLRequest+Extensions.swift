@@ -9,23 +9,6 @@ import Foundation
 
 extension URLRequest {
     /// Вспомогательная функция для создания HTTP запроса
-    //    static func makeHTTPRequest(
-    //        path: String,
-    //        httpMethod: String,
-    //        host: String = "api.unsplash.com"
-    //    ) -> URLRequest {
-    //        
-    //        var urlComponents = URLComponents()
-    //        urlComponents.scheme = "https"
-    //        urlComponents.host = host
-    //        urlComponents.path = path
-    //        let url = urlComponents.url!
-    //        
-    //        var request = URLRequest(url: url)
-    //        request.httpMethod = httpMethod
-    //        return request
-    //    }
-    
     static func makeHTTPRequest(
         path: String,
         httpMethod: String,

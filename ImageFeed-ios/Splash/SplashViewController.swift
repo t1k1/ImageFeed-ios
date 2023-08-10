@@ -8,10 +8,10 @@
 import UIKit
 
 final class SplashViewController: UIViewController {
-  
+    
     //MARK: - Variables
     private let ShowAuthSegueIdentifier = "authStoryBordID"
-    private let oauth2Service = OAuth2Service()
+    private let oauth2Service = OAuth2Service.shared
     private let oauth2TokenStorage = OAuth2TokenStorage()
     
     //MARK: - Lyfe cycle
@@ -33,7 +33,8 @@ extension SplashViewController: AuthViewControllerDelegate{
             
             guard let navigationController = segue.destination as? UINavigationController,
                   let viewController = navigationController.viewControllers[0] as? AuthViewController else {
-                fatalError("Failed to prepare for \(ShowAuthSegueIdentifier)")
+                assertionFailure("Failed to prepare for \(ShowAuthSegueIdentifier)")
+                return
             }
             
             viewController.delegate = self
@@ -54,13 +55,14 @@ extension SplashViewController {
     
     private func switchToTabBarController() {
         guard let window = UIApplication.shared.windows.first else {
-            fatalError("Invalid Configuration")
+            assertionFailure("Invalid Configuration")
+            return
         }
         
         let tapBarController = UIStoryboard(name: "Main", bundle: .main).instantiateViewController(withIdentifier: "TabBarViewController")
         window.rootViewController = tapBarController
     }
-
+    
     private func fetchAuthToken(_ code: String){
         oauth2Service.fetchAuthToken(code) { [weak self] result in
             guard let self = self else { return }
