@@ -9,15 +9,18 @@ import Foundation
 
 final class ProfileImageService {
     //MARK: - Variables
-    static let shared = ProfileImageService()
-    private let urlSession = URLSession.shared
-    private var task: URLSessionTask?
-    private (set) var avatarURL: String?
     private struct Keys {
         static let authorization = "Authorization"
         static let bearer = "Bearer"
         static let httpMethodGet = "GET"
+        static let notificationName = "ProfileImageProviderDidChange"
+        static let paramNameURL = "URL"
     }
+    static let shared = ProfileImageService()
+    private let urlSession = URLSession.shared
+    private var task: URLSessionTask?
+    private (set) var avatarURL: String?
+    static let DidChangeNotification = Notification.Name(rawValue: Keys.notificationName)
     
     //MARK: - Initialization
     private init() { }
@@ -49,6 +52,12 @@ final class ProfileImageService {
                         self.avatarURL = avatarURL
                         
                         completion(.success(avatarURL))
+                        NotificationCenter.default
+                            .post(
+                                name: ProfileImageService.DidChangeNotification,
+                                object: self,
+                                userInfo: [Keys.paramNameURL: avatarURL])
+                        
                         self.task = nil
                     case .failure(let error):
                         completion(.failure(error))

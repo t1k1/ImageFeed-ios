@@ -12,6 +12,7 @@ final class ProfileViewController: UIViewController {
     //MARK: - Variables
     private let profileServise = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
+    private var profileImageServiceObserver: NSObjectProtocol?
     private let descriptionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -70,8 +71,7 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        updateProfileLabels(profile: profileServise.profile)
-//        print(profileImageService.avatarURL ?? "!NO AVATAR")
+        updateProfileInfo(profile: profileServise.profile)
         addSubViews()
         configureConstraints()
     }
@@ -116,10 +116,29 @@ private extension ProfileViewController {
         // Выход из профиля
     }
     
-    func updateProfileLabels(profile: Profile?) {
+    func updateProfileInfo(profile: Profile?) {
         guard let profile = profile else { return }
         nameLabel.text = profile.name
         loginNameLabel.text = profile.loginName
         descriptionLabel.text = profile.bio
+        
+        profileImageServiceObserver = NotificationCenter.default.addObserver(
+            forName: ProfileImageService.DidChangeNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            guard let self = self else { return }
+            self.updateAvatar()
+        }
+        updateAvatar()
+    }
+    
+    func updateAvatar() {
+        guard
+            let avatarURL = profileImageService.avatarURL,
+            let url = URL(string: avatarURL)
+        else { return }
+        
+        // TODO [Sprint 11] Обновить аватар, используя Kingfisher
     }
 }
