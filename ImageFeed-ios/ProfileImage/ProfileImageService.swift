@@ -40,7 +40,7 @@ final class ProfileImageService {
         
         guard let requestImage = requestImage else { return }
         
-        let task = object(for: requestImage) { [weak self] result in
+        let task = urlSession.objectTask(for: requestImage) { [weak self] (result: Result<UserResult, Error>) in
             DispatchQueue.main.async {
                 guard let self = self else { return }
                 
@@ -72,24 +72,7 @@ final class ProfileImageService {
 }
 
 //MARK: - Private functions
-private extension ProfileImageService {
-    /// Запрос и обработка ответа от сервера
-    func object(
-        for request: URLRequest,
-        complition: @escaping (Result<UserResult,Error>) -> Void
-    ) -> URLSessionTask {
-        
-        let decoder = JSONDecoder()
-        return urlSession.data(for: request ) { (result: Result<Data, Error>) in
-            let response = result.flatMap { data -> Result<UserResult, Error> in
-                Result {
-                    try decoder.decode(UserResult.self, from: data)
-                }
-            }
-            complition(response)
-        }
-    }
-    
+private extension ProfileImageService {    
     /// Вспомогательная функция для получения картинки профиля
     func profileImageURLRequest(userName: String) -> URLRequest? {
         URLRequest.makeHTTPRequest(
