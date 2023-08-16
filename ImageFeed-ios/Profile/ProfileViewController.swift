@@ -10,6 +10,7 @@ import UIKit
 final class ProfileViewController: UIViewController {
     
     //MARK: - Variables
+    private let profileServise = ProfileService.shared
     private let descriptionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -68,14 +69,16 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.fetchProfile(OAuth2TokenStorage().token)
+
         addSubViews()
         configureConstraints()
     }
 }
 
 //MARK: - Functions
-extension ProfileViewController {
-    private func addSubViews() {
+private extension ProfileViewController {
+    func addSubViews() {
         view.addSubview(avatarImageView)
         view.addSubview(descriptionLabel)
         view.addSubview(loginNameLabel)
@@ -83,7 +86,7 @@ extension ProfileViewController {
         view.addSubview(logOutButton)
     }
     
-    private func configureConstraints() {
+    func configureConstraints() {
         NSLayoutConstraint.activate([
             avatarImageView.widthAnchor.constraint(equalToConstant: 70),
             avatarImageView.heightAnchor.constraint(equalToConstant: 70),
@@ -108,7 +111,35 @@ extension ProfileViewController {
     }
     
     @objc
-    private func didTapButton() {
+    func didTapButton() {
         // Выход из профиля
+    }
+    
+    func fetchProfile(_ code: String?){
+        guard let code = code else { return }
+        
+        profileServise.fetchProfile(code) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+                case .success:
+                    do {
+                        let profile = try result.get()
+                        updateLabels(profile: profile)
+                    } catch {
+                        print("!Error getting result: \(error)")
+                    }
+                case .failure:
+                    print("!Failure fetching profile")
+                    break
+            }
+        }
+    }
+    
+    func updateLabels(profile: Profile?) {
+        guard let profile = profile else { return }
+        nameLabel.text = profile.name
+        loginNameLabel.text = profile.loginName
+        descriptionLabel.text = profile.bio
     }
 }

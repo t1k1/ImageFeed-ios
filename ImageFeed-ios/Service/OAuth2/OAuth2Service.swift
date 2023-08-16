@@ -81,19 +81,6 @@ private extension OAuth2Service {
         }
     }
     
-    // Вспомогательная функция для получения своего профиля
-    var selfProfileRequest: URLRequest? {
-        URLRequest.makeHTTPRequest(path: "/me", httpMethod: "GET")
-    }
-    
-    /// Вспомогательная функция для получения картинки профиля
-    func profileImageURLRequest(userName: String) -> URLRequest? {
-        URLRequest.makeHTTPRequest(
-            path: "/users/\(userName)",
-            httpMethod: "GET"
-        )
-    }
-    
     /// Вспомогательная функция для получения картинок
     func photosRequest(page: Int, perPage: Int) -> URLRequest? {
         URLRequest.makeHTTPRequest(
