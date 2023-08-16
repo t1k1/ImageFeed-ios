@@ -14,12 +14,15 @@ final class SplashViewController: UIViewController {
     private let ShowAuthSegueIdentifier = "authStoryBordID"
     private let oauth2Service = OAuth2Service.shared
     private let oauth2TokenStorage = OAuth2TokenStorage()
+    private let profileService = ProfileService.shared
+    private let profileImageService = ProfileImageService.shared
     
     //MARK: - Lyfe cycle
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        if oauth2TokenStorage.token != nil {
+        if let token = oauth2TokenStorage.token {
+            self.fetchProfile(token: token)
             switchToTabBarController()
         } else {
             performSegue(withIdentifier: ShowAuthSegueIdentifier, sender: nil)
@@ -48,9 +51,11 @@ extension SplashViewController: AuthViewControllerDelegate{
 //MARK: - Functions
 extension SplashViewController {
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
-        UIBlockingProgressHUD.show()
-    
-        self.fetchAuthToken(code)
+        dismiss(animated: true) { [weak self] in
+            guard let self = self else { return }
+            UIBlockingProgressHUD.show()
+            self.fetchAuthToken(code)
+        }
     }
     
     private func switchToTabBarController() {
@@ -68,14 +73,35 @@ extension SplashViewController {
             guard let self = self else { return }
             
             switch result {
-                case .success:
-                    self.switchToTabBarController()
-                    UIBlockingProgressHUD.dismiss()
+                case .success(let token):
+                    self.fetchProfile(token: token)
                 case .failure:
                     UIBlockingProgressHUD.dismiss()
                     print("!failure NO TOKEN")
                     break
             }
         }
+    }
+    
+    private func fetchProfile(token: String) {
+        profileService.fetchProfile(token) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+                case .success(let data):
+                    
+                    profileImageService.fetchProfileImageURL(
+                        token: token,
+                        username: data.username
+                    ){ _ in }
+                    
+                    UIBlockingProgressHUD.dismiss()
+                    self.switchToTabBarController()
+                case .failure:
+                    print("!Failure fetching profile")
+                    break
+            }
+        }
+        
     }
 }

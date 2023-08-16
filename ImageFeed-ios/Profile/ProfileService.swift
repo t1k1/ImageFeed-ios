@@ -12,7 +12,7 @@ final class ProfileService {
     static let shared = ProfileService()
     private let urlSession = URLSession.shared
     private var task: URLSessionTask?
-    private var profile: Profile?
+    private(set) var profile: Profile?
     private struct Keys {
         static let authorization = "Authorization"
         static let bearer = "Bearer"
@@ -89,13 +89,5 @@ private extension ProfileService {
     /// Вспомогательная функция для получения своего профиля
     var selfProfileRequest: URLRequest? {
         URLRequest.makeHTTPRequest(path: "/me", httpMethod: Keys.httpMethodGet)
-    }
-    
-    /// Вспомогательная функция для получения картинки профиля
-    func profileImageURLRequest(userName: String) -> URLRequest? {
-        URLRequest.makeHTTPRequest(
-            path: "/users/\(userName)",
-            httpMethod: Keys.httpMethodGet
-        )
     }
 }

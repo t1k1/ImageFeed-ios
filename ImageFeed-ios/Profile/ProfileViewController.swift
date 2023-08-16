@@ -11,6 +11,7 @@ final class ProfileViewController: UIViewController {
     
     //MARK: - Variables
     private let profileServise = ProfileService.shared
+    private let profileImageService = ProfileImageService.shared
     private let descriptionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -69,8 +70,8 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.fetchProfile(OAuth2TokenStorage().token)
-
+        updateProfileLabels(profile: profileServise.profile)
+//        print(profileImageService.avatarURL ?? "!NO AVATAR")
         addSubViews()
         configureConstraints()
     }
@@ -115,28 +116,7 @@ private extension ProfileViewController {
         // Выход из профиля
     }
     
-    func fetchProfile(_ code: String?){
-        guard let code = code else { return }
-        
-        profileServise.fetchProfile(code) { [weak self] result in
-            guard let self = self else { return }
-            
-            switch result {
-                case .success:
-                    do {
-                        let profile = try result.get()
-                        updateLabels(profile: profile)
-                    } catch {
-                        print("!Error getting result: \(error)")
-                    }
-                case .failure:
-                    print("!Failure fetching profile")
-                    break
-            }
-        }
-    }
-    
-    func updateLabels(profile: Profile?) {
+    func updateProfileLabels(profile: Profile?) {
         guard let profile = profile else { return }
         nameLabel.text = profile.name
         loginNameLabel.text = profile.loginName
