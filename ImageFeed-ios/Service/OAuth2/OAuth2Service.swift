@@ -30,7 +30,7 @@ final class OAuth2Service {
     //MARK: - Main function
     func fetchAuthToken(
         _ code: String,
-        complition: @escaping (Result<String,Error>) -> Void
+        completion: @escaping (Result<String,Error>) -> Void
     ) {
         assert(Thread.isMainThread)
         if lastCode == code { return }
@@ -49,10 +49,10 @@ final class OAuth2Service {
                     case .success(let body):
                         let authToken = body.accessToken
                         self.authToken = authToken
-                        complition(.success(authToken))
+                        completion(.success(authToken))
                         self.task = nil
                     case .failure(let error):
-                        complition(.failure(error))
+                        completion(.failure(error))
                         self.lastCode = nil
                 }
             }
@@ -101,7 +101,7 @@ private extension OAuth2Service {
             + "&&code=\(code)"
             + "&&grant_type=authorization_code",
             httpMethod: "POST",
-            baseURL: URL(string: "https://unsplash.com")
+            baseURL: URL(string: "https://unsplash.comm")
         )
     }
     

@@ -16,6 +16,8 @@ final class SplashViewController: UIViewController {
     private let oauth2TokenStorage = OAuth2TokenStorage()
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
+    private var alertPresenter: AlertPresenterProtocol?
+    private var authViewController = AuthViewController()
     
     //MARK: - Lyfe cycle
     override func viewDidAppear(_ animated: Bool) {
@@ -26,6 +28,12 @@ final class SplashViewController: UIViewController {
         } else {
             performSegue(withIdentifier: ShowAuthSegueIdentifier, sender: nil)
         }
+    }
+    
+     override func viewDidLoad() {
+        super.viewDidLoad()
+        
+         alertPresenter = AlertPresenter(delagate: authViewController)
     }
 }
 
@@ -77,6 +85,8 @@ extension SplashViewController {
                 case .failure:
                     UIBlockingProgressHUD.dismiss()
                     print("!failure NO TOKEN")
+                    //TODO: вызвать alert
+                    showErrorAlert()
                     break
             }
         }
@@ -102,5 +112,21 @@ extension SplashViewController {
             }
         }
         
+    }
+}
+
+//MARK: - AlertPresentableDelagate
+extension SplashViewController {
+    private func showErrorAlert(){
+        let alert = AlertModel(title: "Что-то пошло не так(",
+                               message: "Не удалось войти в систему",
+                               buttonText: "Ок",
+                               completion: { //[weak self] in
+//            guard let self = self else {
+//                return
+//            }
+            //            oauth2TokenStorage.token = nil
+        })
+        alertPresenter?.show(alert)
     }
 }

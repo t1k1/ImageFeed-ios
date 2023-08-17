@@ -18,11 +18,11 @@ extension URLSession {
     /// Вспомогательный метод для выполнения сетевого запроса
     private func data(
         for request: URLRequest,
-        complition: @escaping (Result<Data,Error>) -> Void
+        completion: @escaping (Result<Data,Error>) -> Void
     ) -> URLSessionTask {
         let fulfillCompleteon: (Result<Data,Error>) -> Void = { result in
             DispatchQueue.main.async {
-                complition(result)
+                completion(result)
             }
         }
         

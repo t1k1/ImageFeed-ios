@@ -11,6 +11,10 @@
 		D528D3A02A8B7CE30064AEA2 /* UIBlockingProgressHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = D528D39F2A8B7CE30064AEA2 /* UIBlockingProgressHUD.swift */; };
 		D550E5032A8CB8F700379F33 /* ProfileImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D550E5022A8CB8F700379F33 /* ProfileImageService.swift */; };
 		D550E5052A8CB92400379F33 /* UserResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = D550E5042A8CB92400379F33 /* UserResult.swift */; };
+		D550E5072A8D03B800379F33 /* AlertModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D550E5062A8D03B800379F33 /* AlertModel.swift */; };
+		D550E50A2A8D04D100379F33 /* AlertPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D550E5092A8D04D100379F33 /* AlertPresenter.swift */; };
+		D550E50C2A8D04F400379F33 /* AlertPresenterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D550E50B2A8D04F400379F33 /* AlertPresenterProtocol.swift */; };
+		D550E50E2A8D050E00379F33 /* AlertPresentableDelagate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D550E50D2A8D050E00379F33 /* AlertPresentableDelagate.swift */; };
 		D57538792A7CD56B0039F837 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57538782A7CD56B0039F837 /* SplashViewController.swift */; };
 		D5777A182A700597002B073F /* SingleImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5777A172A700597002B073F /* SingleImageViewController.swift */; };
 		D57C56DC2A7A90AC00F5C389 /* OAuth2Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57C56DB2A7A90AC00F5C389 /* OAuth2Service.swift */; };
@@ -42,6 +46,10 @@
 		D528D39F2A8B7CE30064AEA2 /* UIBlockingProgressHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBlockingProgressHUD.swift; sourceTree = "<group>"; };
 		D550E5022A8CB8F700379F33 /* ProfileImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageService.swift; sourceTree = "<group>"; };
 		D550E5042A8CB92400379F33 /* UserResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResult.swift; sourceTree = "<group>"; };
+		D550E5062A8D03B800379F33 /* AlertModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertModel.swift; sourceTree = "<group>"; };
+		D550E5092A8D04D100379F33 /* AlertPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresenter.swift; sourceTree = "<group>"; };
+		D550E50B2A8D04F400379F33 /* AlertPresenterProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresenterProtocol.swift; sourceTree = "<group>"; };
+		D550E50D2A8D050E00379F33 /* AlertPresentableDelagate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresentableDelagate.swift; sourceTree = "<group>"; };
 		D57538782A7CD56B0039F837 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		D5777A172A700597002B073F /* SingleImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleImageViewController.swift; sourceTree = "<group>"; };
 		D57C56DB2A7A90AC00F5C389 /* OAuth2Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth2Service.swift; sourceTree = "<group>"; };
@@ -83,12 +91,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		D550E5012A8CB8C300379F33 /* ProfileImage */ = {
+		D550E5082A8D04B900379F33 /* Alert */ = {
 			isa = PBXGroup;
 			children = (
-				D550E5022A8CB8F700379F33 /* ProfileImageService.swift */,
+				D550E5092A8D04D100379F33 /* AlertPresenter.swift */,
+				D550E50B2A8D04F400379F33 /* AlertPresenterProtocol.swift */,
+				D550E50D2A8D050E00379F33 /* AlertPresentableDelagate.swift */,
 			);
-			path = ProfileImage;
+			path = Alert;
 			sourceTree = "<group>";
 		};
 		D57538772A7CD55C0039F837 /* Splash */ = {
@@ -115,6 +125,7 @@
 				D5D7C8222A8BA6DB00118B6F /* ProfileResult.swift */,
 				D5D7C8242A8BA98D00118B6F /* Profile.swift */,
 				D550E5042A8CB92400379F33 /* UserResult.swift */,
+				D550E5062A8D03B800379F33 /* AlertModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -153,6 +164,8 @@
 			children = (
 				D57C56E62A7BB86D00F5C389 /* OAuth2 */,
 				D5A936092A79330E0043A4F4 /* Constants.swift */,
+				D550E5022A8CB8F700379F33 /* ProfileImageService.swift */,
+				D5D7C8202A8BA66700118B6F /* ProfileService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -171,7 +184,6 @@
 		D5B9D2752A6FB4AB00B30DA3 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				D5D7C8202A8BA66700118B6F /* ProfileService.swift */,
 				D5B9D2762A6FB4C700B30DA3 /* ProfileViewController.swift */,
 			);
 			path = Profile;
@@ -202,8 +214,8 @@
 				D5A9360B2A7A43680043A4F4 /* Auth */,
 				D59D37812A540230005F79CC /* ImagesList */,
 				D5777A162A70057F002B073F /* SingleImage */,
+				D550E5082A8D04B900379F33 /* Alert */,
 				D5B9D2752A6FB4AB00B30DA3 /* Profile */,
-				D550E5012A8CB8C300379F33 /* ProfileImage */,
 				D59D377C2A53F946005F79CC /* Helpers */,
 				D5D9C9972A52B83E00765731 /* AppDelegate.swift */,
 				D5D9C9992A52B83E00765731 /* SceneDelegate.swift */,
@@ -297,6 +309,8 @@
 				D5D9C9982A52B83E00765731 /* AppDelegate.swift in Sources */,
 				D5D7C8252A8BA98D00118B6F /* Profile.swift in Sources */,
 				D57C56DC2A7A90AC00F5C389 /* OAuth2Service.swift in Sources */,
+				D550E50C2A8D04F400379F33 /* AlertPresenterProtocol.swift in Sources */,
+				D550E50A2A8D04D100379F33 /* AlertPresenter.swift in Sources */,
 				D528D3A02A8B7CE30064AEA2 /* UIBlockingProgressHUD.swift in Sources */,
 				D5A9360D2A7A438C0043A4F4 /* AuthViewController.swift in Sources */,
 				D59D37802A540202005F79CC /* ImagesListCell.swift in Sources */,
@@ -305,7 +319,9 @@
 				D550E5032A8CB8F700379F33 /* ProfileImageService.swift in Sources */,
 				D57C56E82A7BB96600F5C389 /* AuthViewControllerDelegate.swift in Sources */,
 				D57C56E52A7BAB5400F5C389 /* OAuth2TokenStorage.swift in Sources */,
+				D550E50E2A8D050E00379F33 /* AlertPresentableDelagate.swift in Sources */,
 				D57C56E32A7BA0D700F5C389 /* OAuthTokenResponseBody.swift in Sources */,
+				D550E5072A8D03B800379F33 /* AlertModel.swift in Sources */,
 				D5D9C99A2A52B83E00765731 /* SceneDelegate.swift in Sources */,
 				D5B9D2772A6FB4C700B30DA3 /* ProfileViewController.swift in Sources */,
 				D59D377E2A53F95E005F79CC /* UIColor+Extensions.swift in Sources */,
