@@ -17,7 +17,6 @@ final class SplashViewController: UIViewController {
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
     private var alertPresenter: AlertPresenterProtocol?
-    private var authViewController = AuthViewController()
     
     //MARK: - Lyfe cycle
     override func viewDidAppear(_ animated: Bool) {
@@ -28,12 +27,6 @@ final class SplashViewController: UIViewController {
         } else {
             performSegue(withIdentifier: ShowAuthSegueIdentifier, sender: nil)
         }
-    }
-    
-     override func viewDidLoad() {
-        super.viewDidLoad()
-        
-         alertPresenter = AlertPresenter(delagate: authViewController)
     }
 }
 
@@ -58,9 +51,9 @@ extension SplashViewController: AuthViewControllerDelegate{
 //MARK: - Functions
 extension SplashViewController {
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
+        UIBlockingProgressHUD.show()
         dismiss(animated: true) { [weak self] in
             guard let self = self else { return }
-            UIBlockingProgressHUD.show()
             self.fetchAuthToken(code)
         }
     }
@@ -84,9 +77,8 @@ extension SplashViewController {
                     self.fetchProfile(token: token)
                 case .failure:
                     UIBlockingProgressHUD.dismiss()
-                    print("!failure NO TOKEN")
-                    //TODO: вызвать alert
                     showErrorAlert()
+                    
                     break
             }
         }
@@ -106,8 +98,8 @@ extension SplashViewController {
                     
                     UIBlockingProgressHUD.dismiss()
                     self.switchToTabBarController()
-                case .failure:
-                    print("!Failure fetching profile")
+                case .failure(let error):
+                    showErrorAlert(message: "Failure fetching profile. Error: \(error)")
                     break
             }
         }
@@ -115,18 +107,30 @@ extension SplashViewController {
     }
 }
 
-//MARK: - AlertPresentableDelagate
+//MARK: - AlertPresenter
 extension SplashViewController {
-    private func showErrorAlert(){
+    private func showErrorAlert(message: String = "Не удалось войти в систему"){
         let alert = AlertModel(title: "Что-то пошло не так(",
-                               message: "Не удалось войти в систему",
+                               message: message,
                                buttonText: "Ок",
-                               completion: { //[weak self] in
-//            guard let self = self else {
-//                return
-//            }
-            //            oauth2TokenStorage.token = nil
+                               completion: { [weak self] in
+            guard let self = self else {
+                return
+            }
+            oauth2TokenStorage.token = nil
         })
+        //TODO: Найти более изящный вариант
+        let topController = UIApplication.topViewController()
+        guard let topController = topController else { return }
+        alertPresenter = AlertPresenter(delagate: topController as? AlertPresentableDelagate)
+        
         alertPresenter?.show(alert)
+    }
+}
+
+//MARK: - AlertPresentableDelagate
+extension SplashViewController: AlertPresentableDelagate {
+    func present(alert: UIAlertController, animated flag: Bool) {
+        self.present(alert, animated: flag)
     }
 }

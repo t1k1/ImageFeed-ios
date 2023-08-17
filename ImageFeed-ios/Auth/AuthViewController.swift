@@ -40,6 +40,6 @@ extension AuthViewController: WebViewViewControllerDelegate {
 //MARK: - AlertPresentableDelagate
 extension AuthViewController: AlertPresentableDelagate {
     func present(alert: UIAlertController, animated flag: Bool) {
-            self.present(alert, animated: flag)
+        self.present(alert, animated: flag)
     }
 }

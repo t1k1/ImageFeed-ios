@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
     
@@ -61,7 +62,7 @@ final class ProfileViewController: UIViewController {
         return button
     }()
     private let avatarImageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "Avatar mock") ?? UIImage(systemName: "person.crop.circle.fill"))
+        let imageView = UIImageView(image: UIImage(systemName: "person.crop.circle.fill"))
         imageView.translatesAutoresizingMaskIntoConstraints = false
         
         return imageView
@@ -139,6 +140,20 @@ private extension ProfileViewController {
             let url = URL(string: avatarURL)
         else { return }
         
-        // TODO [Sprint 11] Обновить аватар, используя Kingfisher
+        //Когда картинка берется из кэша, то появляется белый фон (под скруглениями)
+        //Если очищать кэш картинки и каждый раз загружать, то все ок
+        let cache = ImageCache.default
+        cache.clearMemoryCache()
+        cache.clearDiskCache()
+        
+        let avatarPlaceholderImage = UIImage(named: "avatar_placeholder")
+        
+        let processor = RoundCornerImageProcessor(cornerRadius: 61)
+        avatarImageView.kf.indicatorType = .activity
+        avatarImageView.kf.setImage(
+            with: url,
+            placeholder: avatarPlaceholderImage,
+            options: [.processor(processor)]
+        )
     }
 }
