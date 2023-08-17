@@ -17,10 +17,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window = UIWindow(windowScene: scene)
         window?.isHidden = false
-        window?.rootViewController = UIStoryboard(
-            name: "Main",
-            bundle: .main
-        ).instantiateInitialViewController()
+        
+        let splashViewController = SplashViewController()
+        window?.rootViewController = splashViewController
     }
     
     func sceneDidDisconnect(_ scene: UIScene) {

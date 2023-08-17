@@ -10,6 +10,14 @@ import ProgressHUD
 
 final class SplashViewController: UIViewController {
     
+    //MARK: - Layout variables
+    private let splashScreenImageView: UIImageView = {
+        let imageView = UIImageView(image: UIImage(named: "LaunchScreen"))
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        return imageView
+    }()
+    
     //MARK: - Variables
     private let ShowAuthSegueIdentifier = "authStoryBordID"
     private let oauth2Service = OAuth2Service.shared
@@ -17,6 +25,11 @@ final class SplashViewController: UIViewController {
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
     private var alertPresenter: AlertPresenterProtocol?
+    private var authViewController: AuthViewController?
+    private struct Keys {
+        static let main = "Main"
+        static let authViewControllerID = "AuthViewController"
+    }
     
     //MARK: - Lyfe cycle
     override func viewDidAppear(_ animated: Bool) {
@@ -25,26 +38,29 @@ final class SplashViewController: UIViewController {
         if let token = oauth2TokenStorage.token {
             self.fetchProfile(token: token)
         } else {
-            performSegue(withIdentifier: ShowAuthSegueIdentifier, sender: nil)
+            switchToAuthViewController()
         }
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        view.backgroundColor = .ypBlack
+        addSubViews()
+        configureConstraints()
     }
 }
 
 //MARK: - AuthViewControllerDelegate
 extension SplashViewController: AuthViewControllerDelegate{
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == ShowAuthSegueIdentifier {
-            
-            guard let navigationController = segue.destination as? UINavigationController,
-                  let viewController = navigationController.viewControllers[0] as? AuthViewController else {
-                assertionFailure("Failed to prepare for \(ShowAuthSegueIdentifier)")
-                return
-            }
-            
-            viewController.delegate = self
-        } else {
-            super.prepare(for: segue, sender: sender)
-        }
+    private func switchToAuthViewController() {
+        let storyboard = UIStoryboard(name: "Main", bundle: .main)
+        authViewController = storyboard.instantiateViewController(withIdentifier: Keys.authViewControllerID) as? AuthViewController
+        authViewController?.delegate = self
+        guard let authViewController = authViewController else { return }
+        
+        authViewController.modalPresentationStyle = .fullScreen
+        present(authViewController, animated: true)
     }
 }
 
@@ -132,5 +148,21 @@ extension SplashViewController {
 extension SplashViewController: AlertPresentableDelagate {
     func present(alert: UIAlertController, animated flag: Bool) {
         self.present(alert, animated: flag)
+    }
+}
+
+//MARK: - Layout functions
+extension SplashViewController {
+    func addSubViews() {
+        view.addSubview(splashScreenImageView)
+    }
+    
+    func configureConstraints() {
+        NSLayoutConstraint.activate([
+            splashScreenImageView.heightAnchor.constraint(equalToConstant: 77),
+            splashScreenImageView.widthAnchor.constraint(equalToConstant: 74),
+            splashScreenImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            splashScreenImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
     }
 }

@@ -14,6 +14,8 @@ final class ProfileViewController: UIViewController {
     private let profileServise = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
+    
+    //MARK: - Layout variables
     private let descriptionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -79,7 +81,7 @@ final class ProfileViewController: UIViewController {
     }
 }
 
-//MARK: - Functions
+//MARK: - Layout functions
 private extension ProfileViewController {
     func addSubViews() {
         view.addSubview(avatarImageView)
@@ -112,7 +114,10 @@ private extension ProfileViewController {
             
         ])
     }
-    
+}
+
+//MARK: - Functions
+private extension ProfileViewController {
     @objc
     func didTapButton() {
         //TODO: Выход из профиля
