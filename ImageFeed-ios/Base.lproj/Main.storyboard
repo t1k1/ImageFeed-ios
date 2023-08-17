@@ -13,7 +13,7 @@
         <!--ImageList-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController title="ImageList" id="BYZ-38-t0r" customClass="ImagesListViewController" customModule="ImageFeed_ios" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ImagesListViewController" title="ImageList" id="BYZ-38-t0r" customClass="ImagesListViewController" customModule="ImageFeed_ios" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -115,28 +115,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2073" y="355"/>
-        </scene>
-        <!--Profile-->
-        <scene sceneID="pFU-WO-5XE">
-            <objects>
-                <viewController title="Profile" id="y5r-j4-244" customClass="ProfileViewController" customModule="ImageFeed_ios" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="zXz-vj-aSd">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="as3-jN-23n"/>
-                        <color key="backgroundColor" name="YP Black"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="" image="tab_profile_active" id="hrB-C0-Bvg"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="UDH-gF-xt0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-2073" y="1105"/>
+            <point key="canvasLocation" x="-2225" y="355"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="CGb-KJ-cff">
             <objects>
-                <tabBarController storyboardIdentifier="TabBarViewController" id="Dio-1p-4T7" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="TabBarViewController" id="Dio-1p-4T7" customClass="TabBarController" customModule="ImageFeed_ios" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="OOB-hy-ZQf">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -146,14 +130,10 @@
                             <color key="backgroundColor" name="YP Black"/>
                         </tabBarAppearance>
                     </tabBar>
-                    <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="zy1-yK-S2P"/>
-                        <segue destination="y5r-j4-244" kind="relationship" relationship="viewControllers" id="qYc-0w-6fZ"/>
-                    </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D01-iE-dAF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3179" y="559"/>
+            <point key="canvasLocation" x="-3179" y="355"/>
         </scene>
         <!--Single Image View Controller-->
         <scene sceneID="iN4-hc-t0J">
@@ -226,7 +206,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0Pd-gx-YId" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1218" y="355"/>
+            <point key="canvasLocation" x="-1356" y="355"/>
         </scene>
         <!--Auth View Controller-->
         <scene sceneID="sxl-d4-dpa">
@@ -396,7 +376,6 @@
         <image name="button_sharing_image" width="51" height="50"/>
         <image name="nav_back_button" width="24" height="24"/>
         <image name="tab_editorial_active" width="30" height="30"/>
-        <image name="tab_profile_active" width="30" height="30"/>
         <namedColor name="YP Background">
             <color red="0.10199999809265137" green="0.10599999874830246" blue="0.13300000131130219" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

@@ -50,7 +50,7 @@ final class ProfileViewController: UIViewController {
         
         if #available(iOS 14.0, *) {
             let logOutAction = UIAction(title: "Logout") { (ACTION) in
-                // Выход из профиля
+                //TODO: Выход из профиля
             }
             button.addAction(logOutAction, for: .touchUpInside)
         } else {
@@ -72,6 +72,7 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = .ypBlack
         updateProfileInfo(profile: profileServise.profile)
         addSubViews()
         configureConstraints()
@@ -114,7 +115,7 @@ private extension ProfileViewController {
     
     @objc
     func didTapButton() {
-        // Выход из профиля
+        //TODO: Выход из профиля
     }
     
     func updateProfileInfo(profile: Profile?) {
