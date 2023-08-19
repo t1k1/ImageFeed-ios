@@ -21,6 +21,7 @@ final class WebViewViewController: UIViewController {
     //MARK: - Variables
     weak var delegate: WebViewViewControllerDelegate?
     private var estimatedProgressObservtion: NSKeyValueObservation?
+    private var alertPresenter: AlertPresenterProtocol?
     private struct WebKeys {
         static let clientId = "client_id"
         static let redirectUri = "redirect_uri"
@@ -59,6 +60,10 @@ extension WebViewViewController: WKNavigationDelegate {
         }
     }
     
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        showErrorAlert()
+    }
+
     private func code(from navigationAction: WKNavigationAction) -> String? {
         if let url = navigationAction.request.url,
            let urlComponents = URLComponents(string: url.absoluteString),
@@ -110,5 +115,27 @@ private extension WebViewViewController {
     private func updateProgress() {
         progressView.progress = Float(webView.estimatedProgress)
         progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
+    }
+}
+
+//MARK: - AlertPresenter
+extension WebViewViewController {
+    private func showErrorAlert(message: String = "Не удалось войти в систему"){
+        let alert = AlertModel(title: "Что-то пошло не так(",
+                               message: message,
+                               buttonText: "Ок",
+                               completion: { [weak self] in
+            guard let self = self else { return }
+            dismiss(animated: true)
+        })
+        alertPresenter = AlertPresenter(delagate: self)
+        alertPresenter?.show(alert)
+    }
+}
+
+//MARK: - AlertPresentableDelagate
+extension WebViewViewController: AlertPresentableDelagate {
+    func present(alert: UIAlertController, animated flag: Bool) {
+        self.present(alert, animated: flag)
     }
 }

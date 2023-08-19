@@ -17,6 +17,7 @@ final class ProfileService {
         static let authorization = "Authorization"
         static let bearer = "Bearer"
         static let nilBio = "User has no description"
+        static let nilLastName = ""
         static let httpMethodGet = "GET"
     }
     
@@ -47,7 +48,7 @@ final class ProfileService {
                     case .success(let body):
                         let profile = Profile(
                             username: body.username,
-                            name: "\(body.firstName) \(body.lastName)",
+                            name: "\(body.firstName) \(body.lastName ?? Keys.nilLastName)",
                             bio: body.bio ?? Keys.nilBio
                         )
                         

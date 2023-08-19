@@ -114,8 +114,8 @@ extension SplashViewController {
                     
                     UIBlockingProgressHUD.dismiss()
                     self.switchToTabBarController()
-                case .failure(let error):
-                    showErrorAlert(message: "Failure fetching profile. Error: \(error)")
+                case .failure:
+                    showErrorAlert()
                     break
             }
         }
@@ -137,8 +137,11 @@ extension SplashViewController {
         })
         //TODO: Найти более изящный вариант
         let topController = UIApplication.topViewController()
-        guard let topController = topController else { return }
-        alertPresenter = AlertPresenter(delagate: topController as? AlertPresentableDelagate)
+        if let topController = topController {
+            alertPresenter = AlertPresenter(delagate: topController as? AlertPresentableDelagate)
+        } else {
+            alertPresenter = AlertPresenter(delagate: self)
+        }
         
         alertPresenter?.show(alert)
     }
