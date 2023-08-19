@@ -58,7 +58,6 @@ extension URLSession {
                 Result {
                     try decoder.decode(T.self, from: data)
                 }
-                
             }
             completion(response)
         }
