@@ -66,6 +66,8 @@ final class ProfileViewController: UIViewController {
     private let avatarImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(systemName: "person.crop.circle.fill"))
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.layer.cornerRadius = 35
+        imageView.clipsToBounds = true
         
         return imageView
     }()
@@ -146,20 +148,12 @@ private extension ProfileViewController {
             let url = URL(string: avatarURL)
         else { return }
         
-        //Когда картинка берется из кэша, то появляется белый фон (под скруглениями)
-        //Если очищать кэш картинки и каждый раз загружать, то все ок
-        let cache = ImageCache.default
-        cache.clearMemoryCache()
-        cache.clearDiskCache()
-        
         let avatarPlaceholderImage = UIImage(named: "avatar_placeholder")
         
-        let processor = RoundCornerImageProcessor(cornerRadius: 61)
         avatarImageView.kf.indicatorType = .activity
         avatarImageView.kf.setImage(
             with: url,
-            placeholder: avatarPlaceholderImage,
-            options: [.processor(processor)]
+            placeholder: avatarPlaceholderImage
         )
     }
 }
