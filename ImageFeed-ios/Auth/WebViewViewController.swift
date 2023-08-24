@@ -20,7 +20,8 @@ final class WebViewViewController: UIViewController {
     
     //MARK: - Variables
     weak var delegate: WebViewViewControllerDelegate?
-    
+    private var estimatedProgressObservtion: NSKeyValueObservation?
+    private var alertPresenter: AlertPresenterProtocol?
     private struct WebKeys {
         static let clientId = "client_id"
         static let redirectUri = "redirect_uri"
@@ -38,31 +39,9 @@ final class WebViewViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        addEstimatedProgressObservtion()
         webView.navigationDelegate = self
-        
         loadWebView()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
-        
-        webView.addObserver(
-            self,
-            forKeyPath: #keyPath(WKWebView.estimatedProgress),
-            options: .new,
-            context: nil
-        )
-        updateProgress()
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(true)
-        
-        webView.removeObserver(
-            self,
-            forKeyPath: #keyPath(WKWebView.estimatedProgress),
-            context: nil
-        )
     }
 }
 
@@ -81,6 +60,10 @@ extension WebViewViewController: WKNavigationDelegate {
         }
     }
     
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        showErrorAlert()
+    }
+
     private func code(from navigationAction: WKNavigationAction) -> String? {
         if let url = navigationAction.request.url,
            let urlComponents = URLComponents(string: url.absoluteString),
@@ -117,22 +100,42 @@ extension WebViewViewController {
 }
 
 //MARK: - KVO
-extension WebViewViewController {
-    override func observeValue(
-        forKeyPath keyPath: String?,
-        of object: Any?,
-        change: [NSKeyValueChangeKey : Any]?,
-        context: UnsafeMutableRawPointer?
-    ) {
-        if keyPath == #keyPath(WKWebView.estimatedProgress) {
-            updateProgress()
-        } else {
-            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
-        }
+private extension WebViewViewController {
+    func addEstimatedProgressObservtion() {
+        estimatedProgressObservtion = webView.observe(
+            \.estimatedProgress,
+             options: [],
+             changeHandler: { [weak self] _, _ in
+                 guard let self = self else { return }
+                 self.updateProgress()
+             }
+        )
     }
     
     private func updateProgress() {
         progressView.progress = Float(webView.estimatedProgress)
         progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
+    }
+}
+
+//MARK: - AlertPresenter
+extension WebViewViewController {
+    private func showErrorAlert(message: String = "Не удалось войти в систему"){
+        let alert = AlertModel(title: "Что-то пошло не так(",
+                               message: message,
+                               buttonText: "Ок",
+                               completion: { [weak self] in
+            guard let self = self else { return }
+            dismiss(animated: true)
+        })
+        alertPresenter = AlertPresenter(delagate: self)
+        alertPresenter?.show(alert)
+    }
+}
+
+//MARK: - AlertPresentableDelagate
+extension WebViewViewController: AlertPresentableDelagate {
+    func present(alert: UIAlertController, animated flag: Bool) {
+        self.present(alert, animated: flag)
     }
 }

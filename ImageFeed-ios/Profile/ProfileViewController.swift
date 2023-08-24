@@ -6,10 +6,16 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
     
     //MARK: - Variables
+    private let profileServise = ProfileService.shared
+    private let profileImageService = ProfileImageService.shared
+    private var profileImageServiceObserver: NSObjectProtocol?
+    
+    //MARK: - Layout variables
     private let descriptionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -46,7 +52,7 @@ final class ProfileViewController: UIViewController {
         
         if #available(iOS 14.0, *) {
             let logOutAction = UIAction(title: "Logout") { (ACTION) in
-                // Выход из профиля
+                //TODO: Выход из профиля
             }
             button.addAction(logOutAction, for: .touchUpInside)
         } else {
@@ -58,8 +64,10 @@ final class ProfileViewController: UIViewController {
         return button
     }()
     private let avatarImageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "Avatar mock") ?? UIImage(systemName: "person.crop.circle.fill"))
+        let imageView = UIImageView(image: UIImage(systemName: "person.crop.circle.fill"))
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.layer.cornerRadius = 35
+        imageView.clipsToBounds = true
         
         return imageView
     }()
@@ -68,14 +76,16 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = .ypBlack
+        updateProfileInfo(profile: profileServise.profile)
         addSubViews()
         configureConstraints()
     }
 }
 
-//MARK: - Functions
-extension ProfileViewController {
-    private func addSubViews() {
+//MARK: - Layout functions
+private extension ProfileViewController {
+    func addSubViews() {
         view.addSubview(avatarImageView)
         view.addSubview(descriptionLabel)
         view.addSubview(loginNameLabel)
@@ -83,7 +93,7 @@ extension ProfileViewController {
         view.addSubview(logOutButton)
     }
     
-    private func configureConstraints() {
+    func configureConstraints() {
         NSLayoutConstraint.activate([
             avatarImageView.widthAnchor.constraint(equalToConstant: 70),
             avatarImageView.heightAnchor.constraint(equalToConstant: 70),
@@ -106,9 +116,44 @@ extension ProfileViewController {
             
         ])
     }
-    
+}
+
+//MARK: - Functions
+private extension ProfileViewController {
     @objc
-    private func didTapButton() {
-        // Выход из профиля
+    func didTapButton() {
+        //TODO: Выход из профиля
+    }
+    
+    func updateProfileInfo(profile: Profile?) {
+        guard let profile = profile else { return }
+        nameLabel.text = profile.name
+        loginNameLabel.text = profile.loginName
+        descriptionLabel.text = profile.bio
+        
+        profileImageServiceObserver = NotificationCenter.default.addObserver(
+            forName: ProfileImageService.DidChangeNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            guard let self = self else { return }
+            self.updateAvatar()
+        }
+        updateAvatar()
+    }
+    
+    func updateAvatar() {
+        guard
+            let avatarURL = profileImageService.avatarURL,
+            let url = URL(string: avatarURL)
+        else { return }
+        
+        let avatarPlaceholderImage = UIImage(named: "avatar_placeholder")
+        
+        avatarImageView.kf.indicatorType = .activity
+        avatarImageView.kf.setImage(
+            with: url,
+            placeholder: avatarPlaceholderImage
+        )
     }
 }
