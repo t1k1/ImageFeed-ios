@@ -65,16 +65,6 @@ final class OAuth2Service {
 
 //MARK: - Private functions
 private extension OAuth2Service {
-    /// Вспомогательная функция для получения картинок
-    func photosRequest(page: Int, perPage: Int) -> URLRequest? {
-        URLRequest.makeHTTPRequest(
-            path: "/photos"
-            + "?page=\(page)"
-            + "&&per_page=\(perPage)",
-            httpMethod: "GET"
-        )
-    }
-    
     /// Вспомогательная функция для получения лайкнутых картинок
     func likeRequest(photoId: String) -> URLRequest? {
         URLRequest.makeHTTPRequest(
