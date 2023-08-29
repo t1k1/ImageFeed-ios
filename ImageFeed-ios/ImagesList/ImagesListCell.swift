@@ -16,25 +16,50 @@ final class ImagesListCell: UITableViewCell {
     @IBOutlet private weak var likeButton: UIButton!
     @IBOutlet private weak var dateLabel: UILabel!
     @IBOutlet private weak var cellImage: UIImageView!
+    
+    //MARK: - Life cycle
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        cellImage.kf.cancelDownloadTask()
+    }
 }
 
 //MARK: - Methods
 extension ImagesListCell {
-    func configCell(using photo: String, with indexPath: IndexPath) {
+    func configCell(using photoStringURL: String, with indexPath: IndexPath) -> Bool {
         gradientBackGroundFor(backgroundLabel)
         
-        guard let image = UIImage(named: photo) else {
-            return
+        var status = false
+        
+        guard let photoURL = URL(string: photoStringURL) else {
+            return status
         }
         
-        cellImage.image = image
+        let placeholderImage = UIImage(named: "image_cell_placeholder")
+        
+        cellImage.kf.indicatorType = .activity
+        cellImage.kf.setImage(
+            with: photoURL,
+            placeholder: placeholderImage
+        ) { result in
+            switch result {
+                case .success(_):
+                    status = true
+                case .failure(let error):
+                    print("!ОШИБКА загрузки картинки \(error)")
+            }
+        }
+        
         dateLabel.text = Date().dateTimeString
         
         let likeImageText = indexPath.row % 2 == 0 ? "Active" : "No Active"
         guard let likeImage = UIImage(named: likeImageText) else {
-            return
+            return status
         }
         likeButton.setImage(likeImage, for: .normal)
+        
+        return status
     }
     
     private func gradientBackGroundFor(_ label: UILabel) {

@@ -49,7 +49,7 @@ final class ImagesListService {
                             )
                             )
                         }
-                        
+                        self.lastLoadedPage = nextPage
                         NotificationCenter.default
                             .post(
                                 name: ImagesListService.DidChangeNotification,
