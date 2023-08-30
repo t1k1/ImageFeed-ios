@@ -30,22 +30,19 @@ final class ImagesListViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         //TODO: Добавить загрузку большого изображения
-//        if segue.identifier == ShowSingleImageSegueIdentifier {
-//            let viewController = segue.destination as? SingleImageViewController
-//            let indexPath = sender as? IndexPath
-//
-//            guard let viewController = viewController,
-//                  let indexPath = indexPath else {
-//
-//                return
-//            }
-//
-//            let image = UIImage(named: photosName[indexPath.row])
-//
-//            viewController.image = image
-//        } else {
-//            super.prepare(for: segue, sender: sender)
-//        }
+        if segue.identifier == ShowSingleImageSegueIdentifier {
+            let viewController = segue.destination as? SingleImageViewController
+            let indexPath = sender as? IndexPath
+            
+            guard let viewController = viewController,
+                  let indexPath = indexPath else {
+                return
+            }
+            
+            viewController.largeImageURL = URL(string: photos[indexPath.row].largeImageURL)
+        } else {
+            super.prepare(for: segue, sender: sender)
+        }
     }
 }
 
@@ -63,8 +60,11 @@ extension ImagesListViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let thumbnailURL = photos[indexPath.row].thumbImageURL
-        let statusOfConfiguringCell = imageListCell.configCell(using: thumbnailURL, with: indexPath)
+        imageListCell.delegate = self
+        
+        let photo = photos[indexPath.row]
+        let statusOfConfiguringCell = imageListCell.configCell(using: photo.thumbImageURL, with: indexPath)
+        imageListCell.setIsLiked(photo.isLiked)
         if statusOfConfiguringCell {
             tableView.reloadRows(at: [indexPath], with: .automatic)
         }
@@ -92,21 +92,19 @@ extension ImagesListViewController: UITableViewDelegate {
     }
     
     //TODO: Добавить загрузку большого изображения
-//    func tableView(_ tableView: UITableView,
-//                   heightForRowAt indexPath: IndexPath
-//    ) -> CGFloat {
-//
-//        guard let image = UIImage(named: photosName[indexPath.row]) else {
-//            return 0
-//        }
-//
-//        let imageInsets = UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16)
-//        let imageViewWidth = tableView.bounds.width - imageInsets.left - imageInsets.right
-//        let imageWidth = image.size.width
-//        let scale = imageViewWidth / imageWidth
-//        let cellHeight = image.size.height * scale + imageInsets.top + imageInsets.bottom
-//        return cellHeight
-//    }
+    func tableView(_ tableView: UITableView,
+                   heightForRowAt indexPath: IndexPath
+    ) -> CGFloat {
+
+        let image = photos[indexPath.row]
+
+        let imageInsets = UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16)
+        let imageViewWidth = tableView.bounds.width - imageInsets.left - imageInsets.right
+        let imageWidth = image.size.width
+        let scale = imageViewWidth / imageWidth
+        let cellHeight = image.size.height * scale + imageInsets.top + imageInsets.bottom
+        return cellHeight
+    }
 }
 
 private extension ImagesListViewController {
@@ -139,6 +137,36 @@ private extension ImagesListViewController {
                 }
                 tableView.insertRows(at: indexPaths, with: .automatic)
             } completion: { _ in }
+        }
+    }
+}
+
+//MARK: - ImagesListCellDelegate
+extension ImagesListViewController: ImagesListCellDelegate {
+    func imageListCellDidTapLike(_ cell: ImagesListCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else { return }
+        
+        let photo = photos[indexPath.row]
+        let isLiked = photo.isLiked
+        
+        UIBlockingProgressHUD.show()
+        
+        guard let imagesListService = imagesListService else { return }
+        
+        imagesListService.changeLike(
+            photoId: photo.id,
+            isLike: isLiked
+        ) { result in
+            switch result {
+                case .success(let isLiked):
+                    self.photos[indexPath.row].isLiked = isLiked
+                    cell.setIsLiked(isLiked)
+                    UIBlockingProgressHUD.dismiss()
+                case .failure(let error):
+                    UIBlockingProgressHUD.dismiss()
+                    // TODO: Показать ошибку с использованием UIAlertController
+                    print("!ОШИБКИ не удалось изменить лайк \(error)")
+            }
         }
     }
 }

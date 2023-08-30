@@ -7,15 +7,25 @@
 
 import UIKit
 
+protocol ImagesListCellDelegate: AnyObject {
+    func imageListCellDidTapLike(_ cell: ImagesListCell)
+}
+
 final class ImagesListCell: UITableViewCell {
     //MARK: - Variables
     static let reuseIdentifier = "ImagesListCell"
+    weak var delegate: ImagesListCellDelegate?
     
     //MARK: - Outltes
     @IBOutlet private weak var backgroundLabel: UILabel!
     @IBOutlet private weak var likeButton: UIButton!
     @IBOutlet private weak var dateLabel: UILabel!
     @IBOutlet private weak var cellImage: UIImageView!
+    
+    //MARK: - Actions
+    @IBAction func likeButtonClicked() {
+        delegate?.imageListCellDidTapLike(self)
+    }
     
     //MARK: - Life cycle
     override func prepareForReuse() {
@@ -53,12 +63,6 @@ extension ImagesListCell {
         
         dateLabel.text = Date().dateTimeString
         
-        let likeImageText = indexPath.row % 2 == 0 ? "Active" : "No Active"
-        guard let likeImage = UIImage(named: likeImageText) else {
-            return status
-        }
-        likeButton.setImage(likeImage, for: .normal)
-        
         return status
     }
     
@@ -79,5 +83,11 @@ extension ImagesListCell {
         
         label.layer.insertSublayer(backgroundLayer, at: 0)
         label.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+    }
+    
+    func setIsLiked(_ isLiked: Bool) {
+        let likeImageText = isLiked ? "Active" : "No Active"
+        guard let likeImage = UIImage(named: likeImageText) else { return }
+        likeButton.setImage(likeImage, for: .normal)
     }
 }

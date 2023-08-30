@@ -64,23 +64,7 @@ final class OAuth2Service {
 }
 
 //MARK: - Private functions
-private extension OAuth2Service {
-    /// Вспомогательная функция для получения лайкнутых картинок
-    func likeRequest(photoId: String) -> URLRequest? {
-        URLRequest.makeHTTPRequest(
-            path: "/photos/\(photoId)/like",
-            httpMethod: "POST"
-        )
-    }
-    
-    /// Вспомогательная функция для получения не лайкнутых картинок
-    func unlikeRequest(photoId: String) -> URLRequest? {
-        URLRequest.makeHTTPRequest(
-            path: "/photos/\(photoId)/like",
-            httpMethod: "DELETE"
-        )
-    }
-    
+private extension OAuth2Service {    
     /// Вспомогательная функция для получения авторизационного токена
     func authTokenRequest(code: String) -> URLRequest? {
         URLRequest.makeHTTPRequest(

@@ -32,3 +32,15 @@ struct UrlsResult: Codable {
     let full: String
     let thumb: String
 }
+
+struct LikeResult: Codable {
+    let photo: PhotoLikeResult
+}
+
+struct PhotoLikeResult: Codable {
+    let likedByUser: Bool
+    
+    enum CodingKeys: String, CodingKey {
+        case likedByUser = "liked_by_user"
+    }
+}

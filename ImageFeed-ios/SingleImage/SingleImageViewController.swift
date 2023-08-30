@@ -24,13 +24,7 @@ final class SingleImageViewController: UIViewController {
     }
     
     //MARK: - Variables
-    var image: UIImage! {
-        didSet {
-            guard isViewLoaded else { return }
-            singleImageView.image = image
-            rescaleAndCenterImageInScrollView(image: image)
-        }
-    }
+    var largeImageURL: URL?
     
     private var activityController = UIActivityViewController(activityItems: [], applicationActivities: nil)
     
@@ -39,18 +33,34 @@ final class SingleImageViewController: UIViewController {
         super.viewDidLoad()
         
         scrollView.minimumZoomScale = 0.1
-        scrollView.maximumZoomScale = 7.5
+        scrollView.maximumZoomScale = 1.25
         
-        singleImageView.image = image
-        rescaleAndCenterImageInScrollView(image: image)
-        
-        activityController = UIActivityViewController(activityItems: [image as Any], applicationActivities: nil)
+        UIBlockingProgressHUD.show()
+        singleImageView.kf.setImage(with: largeImageURL) { [weak self] result in
+            UIBlockingProgressHUD.dismiss()
+            
+            guard let self = self else { return }
+            
+            switch result {
+                case .success(let imageResult):
+                    self.rescaleAndCenterImageInScrollView(image: imageResult.image)
+                    activityController = UIActivityViewController(
+                        activityItems: [imageResult.image as Any],
+                        applicationActivities: nil
+                    )
+                case .failure:
+                    //TODO: - показать ошибку
+                    print("error")
+            }
+        }
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        rescaleAndCenterImageInScrollView(image: image)
+        if let image = singleImageView.image {
+            rescaleAndCenterImageInScrollView(image: image)
+        }
     }
 }
 
@@ -61,8 +71,14 @@ extension SingleImageViewController: UIScrollViewDelegate {
     }
     
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
-        UIView.animate(withDuration: 0.5) {
-            self.rescaleAndCenterImageInScrollView(image: self.image)
+        UIView.animate(withDuration: 0.5) { [weak self] in
+            
+            guard let self = self,
+                  let image = self.singleImageView.image  else {
+                return
+            }
+            
+            self.rescaleAndCenterImageInScrollView(image: image)
         }
     }
 }
