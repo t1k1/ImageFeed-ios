@@ -7,6 +7,7 @@
 
 import UIKit
 import Kingfisher
+import WebKit
 
 final class ProfileViewController: UIViewController {
     
@@ -51,8 +52,8 @@ final class ProfileViewController: UIViewController {
         button.setImage(image, for: .normal)
         
         if #available(iOS 14.0, *) {
-            let logOutAction = UIAction(title: "Logout") { (ACTION) in
-                //TODO: Выход из профиля
+            let logOutAction = UIAction(title: "logOut") { (ACTION) in
+                logOut()
             }
             button.addAction(logOutAction, for: .touchUpInside)
         } else {
@@ -122,7 +123,7 @@ private extension ProfileViewController {
 private extension ProfileViewController {
     @objc
     func didTapButton() {
-        //TODO: Выход из профиля
+        ProfileViewController.logOut()
     }
     
     func updateProfileInfo(profile: Profile?) {
@@ -155,5 +156,18 @@ private extension ProfileViewController {
             with: url,
             placeholder: avatarPlaceholderImage
         )
+    }
+    
+    static func logOut() {
+        OAuth2TokenStorage().token = nil
+        WebViewViewController.cleanCookies()
+
+        guard let window = UIApplication.shared.windows.first else {
+            assertionFailure("Invalid Configuration")
+            return
+        }
+        
+        let authViewController = UIStoryboard(name: "Main", bundle: .main).instantiateViewController(withIdentifier: "AuthViewController")
+        window.rootViewController = authViewController
     }
 }

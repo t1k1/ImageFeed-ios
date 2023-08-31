@@ -29,7 +29,6 @@ final class ImagesListViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        //TODO: Добавить загрузку большого изображения
         if segue.identifier == ShowSingleImageSegueIdentifier {
             let viewController = segue.destination as? SingleImageViewController
             let indexPath = sender as? IndexPath
@@ -91,13 +90,12 @@ extension ImagesListViewController: UITableViewDelegate {
         performSegue(withIdentifier: ShowSingleImageSegueIdentifier, sender: indexPath)
     }
     
-    //TODO: Добавить загрузку большого изображения
     func tableView(_ tableView: UITableView,
                    heightForRowAt indexPath: IndexPath
     ) -> CGFloat {
-
+        
         let image = photos[indexPath.row]
-
+        
         let imageInsets = UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16)
         let imageViewWidth = tableView.bounds.width - imageInsets.left - imageInsets.right
         let imageWidth = image.size.width
@@ -139,6 +137,10 @@ private extension ImagesListViewController {
             } completion: { _ in }
         }
     }
+    
+    func showError() {
+        // TODO: Показать ошибку с использованием UIAlertController
+    }
 }
 
 //MARK: - ImagesListCellDelegate
@@ -156,16 +158,17 @@ extension ImagesListViewController: ImagesListCellDelegate {
         imagesListService.changeLike(
             photoId: photo.id,
             isLike: isLiked
-        ) { result in
+        ) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
                 case .success(let isLiked):
                     self.photos[indexPath.row].isLiked = isLiked
                     cell.setIsLiked(isLiked)
                     UIBlockingProgressHUD.dismiss()
-                case .failure(let error):
+                case .failure:
                     UIBlockingProgressHUD.dismiss()
-                    // TODO: Показать ошибку с использованием UIAlertController
-                    print("!ОШИБКИ не удалось изменить лайк \(error)")
+                    self.showError()
             }
         }
     }

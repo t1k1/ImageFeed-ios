@@ -134,6 +134,7 @@ extension SplashViewController {
                 return
             }
             oauth2TokenStorage.token = nil
+            WebViewViewController.cleanCookies()
         })
         //TODO: Найти более изящный вариант
         let topController = UIApplication.topViewController()
