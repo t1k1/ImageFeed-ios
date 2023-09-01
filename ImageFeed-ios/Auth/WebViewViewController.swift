@@ -18,22 +18,23 @@ final class WebViewViewController: UIViewController {
         delegate?.webViewViewControllerDidCancel(self)
     }
     
-    //MARK: - Variables
-    weak var delegate: WebViewViewControllerDelegate?
-    private var estimatedProgressObservtion: NSKeyValueObservation?
-    private var alertPresenter: AlertPresenterProtocol?
+    //MARK: - Structures of string variables
     private struct WebKeys {
         static let clientId = "client_id"
         static let redirectUri = "redirect_uri"
         static let responseType = "response_type"
         static let scope = "scope"
     }
-    
     private struct WebConstants {
         static let unsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
         static let code = "code"
         static let authPath = "/oauth/authorize/native"
     }
+    
+    //MARK: - Variables
+    weak var delegate: WebViewViewControllerDelegate?
+    private var estimatedProgressObservtion: NSKeyValueObservation?
+    private var alertPresenter: AlertPresenterProtocol?
     
     //MARK: - Lyfe cycle
     override func viewDidLoad() {
@@ -63,7 +64,7 @@ extension WebViewViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
         showErrorAlert()
     }
-
+    
     private func code(from navigationAction: WKNavigationAction) -> String? {
         if let url = navigationAction.request.url,
            let urlComponents = URLComponents(string: url.absoluteString),
@@ -136,6 +137,7 @@ extension WebViewViewController {
             guard let self = self else { return }
             dismiss(animated: true)
         })
+        
         alertPresenter = AlertPresenter(delagate: self)
         alertPresenter?.show(alert)
     }

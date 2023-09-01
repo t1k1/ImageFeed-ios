@@ -11,6 +11,17 @@ import WebKit
 
 final class ProfileViewController: UIViewController {
     
+    //MARK: - Structure of string variables
+    private struct Keys {
+        static let main = "Main"
+        static let logoutImageName = "logout_image"
+        static let systemLogoutImageName = "ipad.and.arrow.forward"
+        static let logOutActionName = "logOut"
+        static let systemAvatarImageName = "person.crop.circle.fill"
+        static let avatarPlaceholderImageName = "avatar_placeholder"
+        static let authViewControllerName = "AuthViewController"
+    }
+    
     //MARK: - Variables
     private let profileServise = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
@@ -20,7 +31,6 @@ final class ProfileViewController: UIViewController {
     private let descriptionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Hello, world!"
         label.font = .systemFont(ofSize: 13, weight: .regular)
         label.textColor = .ypWhite
         
@@ -29,7 +39,6 @@ final class ProfileViewController: UIViewController {
     private let loginNameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "@ekaterina_nov"
         label.font = .systemFont(ofSize: 13, weight: .regular)
         label.textColor = .ypGray
         
@@ -38,21 +47,20 @@ final class ProfileViewController: UIViewController {
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Екатерина Новикова"
         label.font = .systemFont(ofSize: 23, weight: .bold)
         label.textColor = .ypWhite
         
         return label
     }()
     private let logOutButton: UIButton = {
-        let image = UIImage(named: "logout_image") ?? UIImage(systemName: "ipad.and.arrow.forward")!
+        let image = UIImage(named: Keys.logoutImageName) ?? UIImage(systemName: Keys.systemLogoutImageName)!
         
         let button = UIButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(image, for: .normal)
         
         if #available(iOS 14.0, *) {
-            let logOutAction = UIAction(title: "logOut") { (ACTION) in
+            let logOutAction = UIAction(title: Keys.logOutActionName) { (ACTION) in
                 logOut()
             }
             button.addAction(logOutAction, for: .touchUpInside)
@@ -65,7 +73,7 @@ final class ProfileViewController: UIViewController {
         return button
     }()
     private let avatarImageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(systemName: "person.crop.circle.fill"))
+        let imageView = UIImageView(image: UIImage(systemName: Keys.systemAvatarImageName))
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.layer.cornerRadius = 35
         imageView.clipsToBounds = true
@@ -149,7 +157,7 @@ private extension ProfileViewController {
             let url = URL(string: avatarURL)
         else { return }
         
-        let avatarPlaceholderImage = UIImage(named: "avatar_placeholder")
+        let avatarPlaceholderImage = UIImage(named: Keys.avatarPlaceholderImageName)
         
         avatarImageView.kf.indicatorType = .activity
         avatarImageView.kf.setImage(
@@ -167,7 +175,7 @@ private extension ProfileViewController {
             return
         }
         
-        let authViewController = UIStoryboard(name: "Main", bundle: .main).instantiateViewController(withIdentifier: "AuthViewController")
+        let authViewController = UIStoryboard(name: Keys.main, bundle: .main).instantiateViewController(withIdentifier: Keys.authViewControllerName)
         window.rootViewController = authViewController
     }
 }

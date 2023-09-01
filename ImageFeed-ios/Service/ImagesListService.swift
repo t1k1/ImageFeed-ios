@@ -8,15 +8,23 @@
 import Foundation
 
 final class ImagesListService {
+    //MARK: - Structure of string variables
+    private struct Keys {
+        static let nameNotification = "ImagesListServiceDidChange"
+        static let bearer = "Bearer"
+        static let authorization = "Authorization"
+        static let photos = "Photos"
+    }
+    
     //MARK: - Variables
     private let urlSession = URLSession.shared
     private let token = OAuth2TokenStorage().token
     private var lastLoadedPage: Int?
     private var task: URLSessionTask?
     private (set) var photos: [Photo] = []
-    static let DidChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
+    static let DidChangeNotification = Notification.Name(rawValue: Keys.nameNotification)
     
-    //MARK: - Main functions
+    //MARK: - Functions for fetching data
     func fetchPhotosNextPage() {
         let nextPage = getNumberOfNextPage()
         
@@ -25,7 +33,7 @@ final class ImagesListService {
         guard let token = token else { return }
         
         var requestPhotos = photosRequest(page: nextPage, perPage: 10)
-        requestPhotos?.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        requestPhotos?.addValue("\(Keys.bearer) \(token)", forHTTPHeaderField: Keys.authorization)
         
         guard let requestPhotos = requestPhotos else { return }
         
@@ -54,7 +62,7 @@ final class ImagesListService {
                             .post(
                                 name: ImagesListService.DidChangeNotification,
                                 object: self,
-                                userInfo: ["Photos": self.photos])
+                                userInfo: [Keys.photos: self.photos])
                         
                         self.task = nil
                     case .failure(let error):
@@ -77,7 +85,7 @@ final class ImagesListService {
         
         var requestLike = isLike ? unlikeRequest(photoId: photoId) : likeRequest(photoId: photoId)
         guard let token = token else { return }
-        requestLike?.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        requestLike?.addValue("\(Keys.bearer) \(token)", forHTTPHeaderField: Keys.authorization)
         
         guard let requestLike = requestLike else { return }
         
@@ -117,13 +125,14 @@ final class ImagesListService {
     }
 }
 
+
+//MARK: - Private functions
 private extension ImagesListService {
     func getNumberOfNextPage() -> Int {
         guard let lastLoadedPage = lastLoadedPage else { return 1 }
         return lastLoadedPage + 1
     }
     
-    /// Вспомогательная функция для получения картинок
     func photosRequest(page: Int, perPage: Int) -> URLRequest? {
         URLRequest.makeHTTPRequest(
             path: "/photos"
@@ -133,7 +142,6 @@ private extension ImagesListService {
         )
     }
     
-    /// Вспомогательная функция для получения лайкнутых картинок
     func likeRequest(photoId: String) -> URLRequest? {
         URLRequest.makeHTTPRequest(
             path: "/photos/\(photoId)/like",
@@ -141,7 +149,6 @@ private extension ImagesListService {
         )
     }
     
-    /// Вспомогательная функция для получения не лайкнутых картинок
     func unlikeRequest(photoId: String) -> URLRequest? {
         URLRequest.makeHTTPRequest(
             path: "/photos/\(photoId)/like",

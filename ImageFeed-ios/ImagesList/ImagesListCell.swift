@@ -12,10 +12,6 @@ protocol ImagesListCellDelegate: AnyObject {
 }
 
 final class ImagesListCell: UITableViewCell {
-    //MARK: - Variables
-    static let reuseIdentifier = "ImagesListCell"
-    weak var delegate: ImagesListCellDelegate?
-    
     //MARK: - Outltes
     @IBOutlet private weak var backgroundLabel: UILabel!
     @IBOutlet private weak var likeButton: UIButton!
@@ -27,6 +23,18 @@ final class ImagesListCell: UITableViewCell {
         delegate?.imageListCellDidTapLike(self)
     }
     
+    //MARK: - Structure of string variables
+    private struct Keys {
+        static let reuseIdentifierName = "ImagesListCell"
+        static let placeholderImageName = "image_cell_placeholder"
+        static let likedImageName = "Active"
+        static let unlikedImageName = "No Active"
+    }
+    
+    //MARK: - Variables
+    static let reuseIdentifier = Keys.reuseIdentifierName
+    weak var delegate: ImagesListCellDelegate?
+    
     //MARK: - Life cycle
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -35,7 +43,7 @@ final class ImagesListCell: UITableViewCell {
     }
 }
 
-//MARK: - Methods
+//MARK: - Methods for configure cell
 extension ImagesListCell {
     func configCell(using photoStringURL: String, with indexPath: IndexPath) -> Bool {
         gradientBackGroundFor(backgroundLabel)
@@ -46,7 +54,7 @@ extension ImagesListCell {
             return status
         }
         
-        let placeholderImage = UIImage(named: "image_cell_placeholder")
+        let placeholderImage = UIImage(named: Keys.placeholderImageName)
         
         cellImage.kf.indicatorType = .activity
         cellImage.kf.setImage(
@@ -86,7 +94,7 @@ extension ImagesListCell {
     }
     
     func setIsLiked(_ isLiked: Bool) {
-        let likeImageText = isLiked ? "Active" : "No Active"
+        let likeImageText = isLiked ? Keys.likedImageName : Keys.unlikedImageName
         guard let likeImage = UIImage(named: likeImageText) else { return }
         likeButton.setImage(likeImage, for: .normal)
     }

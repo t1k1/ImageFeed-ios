@@ -65,7 +65,6 @@ final class OAuth2Service {
 
 //MARK: - Private functions
 private extension OAuth2Service {    
-    /// Вспомогательная функция для получения авторизационного токена
     func authTokenRequest(code: String) -> URLRequest? {
         URLRequest.makeHTTPRequest(
             path: "/oauth/token"

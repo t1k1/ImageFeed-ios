@@ -10,26 +10,32 @@ import ProgressHUD
 
 final class SplashViewController: UIViewController {
     
+    //MARK: - Structure of string variables
+    private struct Keys {
+        static let main = "Main"
+        static let authViewControllerID = "AuthViewController"
+        static let launchScreenNameImage = "LaunchScreen"
+        static let showAuthSegueIdentifierName = "authStoryBordID"
+        static let tabBarViewControllerName = "TabBarViewController"
+    }
+    
     //MARK: - Layout variables
     private let splashScreenImageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "LaunchScreen"))
+        let imageView = UIImageView(image: UIImage(named: Keys.launchScreenNameImage))
         imageView.translatesAutoresizingMaskIntoConstraints = false
         
         return imageView
     }()
     
     //MARK: - Variables
-    private let ShowAuthSegueIdentifier = "authStoryBordID"
+    private let ShowAuthSegueIdentifier = Keys.showAuthSegueIdentifierName
     private let oauth2Service = OAuth2Service.shared
     private let oauth2TokenStorage = OAuth2TokenStorage()
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
     private var alertPresenter: AlertPresenterProtocol?
     private var authViewController: AuthViewController?
-    private struct Keys {
-        static let main = "Main"
-        static let authViewControllerID = "AuthViewController"
-    }
+    
     
     //MARK: - Lyfe cycle
     override func viewDidAppear(_ animated: Bool) {
@@ -54,7 +60,7 @@ final class SplashViewController: UIViewController {
 //MARK: - AuthViewControllerDelegate
 extension SplashViewController: AuthViewControllerDelegate{
     private func switchToAuthViewController() {
-        let storyboard = UIStoryboard(name: "Main", bundle: .main)
+        let storyboard = UIStoryboard(name: Keys.main, bundle: .main)
         authViewController = storyboard.instantiateViewController(withIdentifier: Keys.authViewControllerID) as? AuthViewController
         authViewController?.delegate = self
         guard let authViewController = authViewController else { return }
@@ -80,7 +86,7 @@ extension SplashViewController {
             return
         }
         
-        let tapBarController = UIStoryboard(name: "Main", bundle: .main).instantiateViewController(withIdentifier: "TabBarViewController")
+        let tapBarController = UIStoryboard(name: Keys.main, bundle: .main).instantiateViewController(withIdentifier: Keys.tabBarViewControllerName)
         window.rootViewController = tapBarController
     }
     
@@ -93,7 +99,7 @@ extension SplashViewController {
                     self.fetchProfile(token: token)
                 case .failure:
                     UIBlockingProgressHUD.dismiss()
-                    showErrorAlert()
+                    self.showErrorAlert()
                     
                     break
             }
@@ -115,7 +121,7 @@ extension SplashViewController {
                     UIBlockingProgressHUD.dismiss()
                     self.switchToTabBarController()
                 case .failure:
-                    showErrorAlert()
+                    self.showErrorAlert()
                     break
             }
         }
@@ -136,7 +142,7 @@ extension SplashViewController {
             oauth2TokenStorage.token = nil
             WebViewViewController.cleanCookies()
         })
-        //TODO: Найти более изящный вариант
+        
         let topController = UIApplication.topViewController()
         if let topController = topController {
             alertPresenter = AlertPresenter(delagate: topController as? AlertPresentableDelagate)

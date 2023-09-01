@@ -13,15 +13,17 @@ final class ImagesListViewController: UIViewController {
     @IBOutlet private weak var tableView: UITableView!
     
     //MARK: - Variables
-    //    private let photosName: [String] = Array(0..<20).map{ "\($0)" }
     private let ShowSingleImageSegueIdentifier = "ShowSingleImage"
     private var photos: [Photo] = []
     private var imagesListService: ImagesListService?
     private var imagesServiceObserver: NSObjectProtocol?
+    private var alertPresenter: AlertPresenter?
     
     //MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        alertPresenter = AlertPresenter(delagate: self)
         
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
         
@@ -105,6 +107,7 @@ extension ImagesListViewController: UITableViewDelegate {
     }
 }
 
+//MARK: - Private functions
 private extension ImagesListViewController {
     func configureImageList() {
         imagesListService = ImagesListService()
@@ -139,7 +142,15 @@ private extension ImagesListViewController {
     }
     
     func showError() {
-        // TODO: Показать ошибку с использованием UIAlertController
+        let alert = AlertModel(title: "Ошибка сети",
+                               message: "Не удалось поставить/убрать лайк",
+                               buttonText: "Ок",
+                               completion: { [weak self] in
+            guard let self = self else { return }
+            dismiss(animated: true)
+        })
+        
+        alertPresenter?.show(alert)
     }
 }
 
@@ -171,5 +182,12 @@ extension ImagesListViewController: ImagesListCellDelegate {
                     self.showError()
             }
         }
+    }
+}
+
+//MARK: - AlertPresentableDelagate
+extension ImagesListViewController: AlertPresentableDelagate {
+    func present(alert: UIAlertController, animated flag: Bool) {
+        self.present(alert, animated: flag)
     }
 }

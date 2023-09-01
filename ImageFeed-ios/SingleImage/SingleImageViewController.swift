@@ -25,12 +25,14 @@ final class SingleImageViewController: UIViewController {
     
     //MARK: - Variables
     var largeImageURL: URL?
-    
+    private var alertPresenter: AlertPresenter?
     private var activityController = UIActivityViewController(activityItems: [], applicationActivities: nil)
     
     //MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        alertPresenter = AlertPresenter(delagate: self)
         
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.25
@@ -101,13 +103,34 @@ private extension SingleImageViewController {
                         applicationActivities: nil
                     )
                 case .failure:
-                    showError()
+                    self.showError()
             }
         }
     }
     
     func showError() {
-        //TODO: - показать ошибку
-        //        Добавьте также функцию showError(), которая показывает алерт об ошибке с текстом «Что-то пошло не так. Попробовать ещё раз?» и с кнопками «Не надо» (скрывает алерт) и «Повторить» (повторно выполняет kt.setImage — используйте блок кода выше; его можно положить в отдельную функцию и вызвать её при нажатии на «Повторить»).
+        let alert = AlertModel(title: "Что-то пошло не так.",
+                               message: "Попробовать ещё раз?",
+                               buttonText: "Не надо",
+                               completion: { [weak self] in
+            guard let self = self else { return }
+            self.dismiss(animated: true)
+        },
+                               secondButtonText: "Повторить",
+                               secondCompletion: { [weak self] in
+            guard let self = self else { return }
+            
+            UIBlockingProgressHUD.show()
+            downloadImage()
+        })
+    
+        alertPresenter?.show(alert)
+    }
+}
+
+//MARK: - AlertPresentableDelagate
+extension SingleImageViewController: AlertPresentableDelagate {
+    func present(alert: UIAlertController, animated flag: Bool) {
+        self.present(alert, animated: flag)
     }
 }

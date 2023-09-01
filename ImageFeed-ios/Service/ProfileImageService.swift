@@ -8,7 +8,7 @@
 import Foundation
 
 final class ProfileImageService {
-    //MARK: - Variables
+    //MARK: - Structure of string variables
     private struct Keys {
         static let authorization = "Authorization"
         static let bearer = "Bearer"
@@ -16,6 +16,8 @@ final class ProfileImageService {
         static let notificationName = "ProfileImageProviderDidChange"
         static let paramNameURL = "URL"
     }
+    
+    //MARK: - Variables
     static let shared = ProfileImageService()
     static let DidChangeNotification = Notification.Name(rawValue: Keys.notificationName)
     private let urlSession = URLSession.shared
@@ -73,7 +75,6 @@ final class ProfileImageService {
 
 //MARK: - Private functions
 private extension ProfileImageService {    
-    /// Вспомогательная функция для получения картинки профиля
     func profileImageURLRequest(userName: String) -> URLRequest? {
         URLRequest.makeHTTPRequest(
             path: "/users/\(userName)",
