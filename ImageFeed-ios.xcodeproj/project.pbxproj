@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		D505B4DF2A86564400710855 /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = D505B4DE2A86564400710855 /* ProgressHUD */; };
 		D528D3A02A8B7CE30064AEA2 /* UIBlockingProgressHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = D528D39F2A8B7CE30064AEA2 /* UIBlockingProgressHUD.swift */; };
+		D53301C92AA74BF40064EF29 /* TranslucentGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D53301C82AA74BF40064EF29 /* TranslucentGradient.swift */; };
 		D550E5032A8CB8F700379F33 /* ProfileImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D550E5022A8CB8F700379F33 /* ProfileImageService.swift */; };
 		D550E5052A8CB92400379F33 /* UserResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = D550E5042A8CB92400379F33 /* UserResult.swift */; };
 		D550E5072A8D03B800379F33 /* AlertModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D550E5062A8D03B800379F33 /* AlertModel.swift */; };
@@ -52,6 +53,7 @@
 
 /* Begin PBXFileReference section */
 		D528D39F2A8B7CE30064AEA2 /* UIBlockingProgressHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBlockingProgressHUD.swift; sourceTree = "<group>"; };
+		D53301C82AA74BF40064EF29 /* TranslucentGradient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslucentGradient.swift; sourceTree = "<group>"; };
 		D550E5022A8CB8F700379F33 /* ProfileImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageService.swift; sourceTree = "<group>"; };
 		D550E5042A8CB92400379F33 /* UserResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResult.swift; sourceTree = "<group>"; };
 		D550E5062A8D03B800379F33 /* AlertModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertModel.swift; sourceTree = "<group>"; };
@@ -107,6 +109,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D53301C72AA74B790064EF29 /* Animations */ = {
+			isa = PBXGroup;
+			children = (
+				D53301C82AA74BF40064EF29 /* TranslucentGradient.swift */,
+			);
+			path = Animations;
+			sourceTree = "<group>";
+		};
 		D550E5082A8D04B900379F33 /* Alert */ = {
 			isa = PBXGroup;
 			children = (
@@ -239,6 +249,7 @@
 				D5B9D2752A6FB4AB00B30DA3 /* Profile */,
 				D550E5082A8D04B900379F33 /* Alert */,
 				D59D377C2A53F946005F79CC /* Helpers */,
+				D53301C72AA74B790064EF29 /* Animations */,
 				D5D9C9972A52B83E00765731 /* AppDelegate.swift */,
 				D5D9C9992A52B83E00765731 /* SceneDelegate.swift */,
 				D5D9C99D2A52B83E00765731 /* Main.storyboard */,
@@ -351,6 +362,7 @@
 				D550E5052A8CB92400379F33 /* UserResult.swift in Sources */,
 				D5A723862A97567C0070D7BD /* PhotoResult.swift in Sources */,
 				D5A9360F2A7A47970043A4F4 /* WebViewViewController.swift in Sources */,
+				D53301C92AA74BF40064EF29 /* TranslucentGradient.swift in Sources */,
 				D550E5032A8CB8F700379F33 /* ProfileImageService.swift in Sources */,
 				D57C56E82A7BB96600F5C389 /* AuthViewControllerDelegate.swift in Sources */,
 				D57C56E52A7BAB5400F5C389 /* OAuth2TokenStorage.swift in Sources */,

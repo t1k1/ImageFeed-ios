@@ -26,6 +26,8 @@ final class ProfileViewController: UIViewController {
     private let profileServise = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
+    private let translucentGradient = TranslucentGradient()
+    private var animationLayers = Set<CALayer>()
     
     //MARK: - Layout variables
     private let descriptionLabel: UILabel = {
@@ -85,6 +87,7 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        addGradients()
         view.backgroundColor = .ypBlack
         updateProfileInfo(profile: profileServise.profile)
         addSubViews()
@@ -163,13 +166,59 @@ private extension ProfileViewController {
         avatarImageView.kf.setImage(
             with: url,
             placeholder: avatarPlaceholderImage
-        )
+        ) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+                case .success:
+                    self.removeGradients()
+                case .failure:
+                    print("!ОШИБКА загрузки аватара")
+            }
+        }
+    }
+    
+    func addGradients() {
+        let avatarGradient = translucentGradient.getGradient(
+            size: CGSize(
+                width: 70,
+                height: 70
+            ),
+            cornerRadius: avatarImageView.layer.cornerRadius)
+        avatarImageView.layer.addSublayer(avatarGradient)
+        animationLayers.insert(avatarGradient)
+        
+        let nameLabelGradient = translucentGradient.getGradient(size: CGSize(
+            width: 223,//nameLabel.bounds.width,
+            height: 27//nameLabel.bounds.height
+        ))
+        nameLabel.layer.addSublayer(nameLabelGradient)
+        animationLayers.insert(nameLabelGradient)
+        
+        let descriptionLabelGradient = translucentGradient.getGradient(size: CGSize(
+            width: 223,//descriptionLabel.bounds.width,
+            height: 20//descriptionLabel.bounds.height
+        ))
+        descriptionLabel.layer.addSublayer(descriptionLabelGradient)
+        animationLayers.insert(descriptionLabelGradient)
+        
+        let loginLabelGradient = translucentGradient.getGradient(size: CGSize(
+            width: 223,//loginNameLabel.bounds.width,
+            height: 20
+        ))
+        loginNameLabel.layer.addSublayer(loginLabelGradient)
+        animationLayers.insert(loginLabelGradient)
+    }
+    
+    func removeGradients() {
+        for gradient in animationLayers {
+            gradient.removeFromSuperlayer()
+        }
     }
     
     static func logOut() {
         OAuth2TokenStorage().token = nil
         WebViewViewController.cleanCookies()
-
+        
         guard let window = UIApplication.shared.windows.first else {
             assertionFailure("Invalid Configuration")
             return
