@@ -61,6 +61,11 @@ extension ImagesListViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
+        imageListCell.addGradient(size: CGSize(
+            width: imageListCell.bounds.width,
+            height: imageListCell.bounds.height
+        ))
+        
         imageListCell.delegate = self
         
         let photo = photos[indexPath.row]
