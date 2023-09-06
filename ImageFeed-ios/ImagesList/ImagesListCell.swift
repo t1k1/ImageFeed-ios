@@ -72,8 +72,9 @@ extension ImagesListCell {
                     self.removeGradient()
                     
                     status = true
-                case .failure(let error):
-                    print("!ОШИБКА загрузки картинки \(error)")
+                case .failure:
+                    self.removeGradient()
+                    cellImage.image = placeholderImage
             }
         }
         
