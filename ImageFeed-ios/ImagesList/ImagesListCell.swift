@@ -36,11 +36,17 @@ final class ImagesListCell: UITableViewCell {
     weak var delegate: ImagesListCellDelegate?
     private let translucentGradient = TranslucentGradient()
     private var animationLayer: CALayer?
+    private let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        return formatter
+    }()
     
     //MARK: - Life cycle
     override func prepareForReuse() {
         super.prepareForReuse()
-    
+        
         removeGradient()
         cellImage.kf.cancelDownloadTask()
     }
@@ -48,9 +54,14 @@ final class ImagesListCell: UITableViewCell {
 
 //MARK: - Methods for configure cell
 extension ImagesListCell {
-    func configCell(using photoStringURL: String, with indexPath: IndexPath) -> Bool {
+    func configCell(using photoStringURL: String, with indexPath: IndexPath, date: Date?) -> Bool {
         gradientBackGroundFor(backgroundLabel)
-        dateLabel.text = Date().dateTimeString
+        
+        if let date = date {
+            dateLabel.text = dateFormatter.string(from: date)
+        } else {
+            dateLabel.text = dateFormatter.string(from: Date())
+        }
         
         var status = false
         
@@ -111,7 +122,7 @@ extension ImagesListCell {
         let cellGradient = translucentGradient.getGradient(
             size: size,
             cornerRadius: cellImage.layer.cornerRadius)
-
+        
         var positionSubLayer: UInt32 = 0
         if let sublayers = cellImage.layer.sublayers {
             positionSubLayer = UInt32(sublayers.count) + 1

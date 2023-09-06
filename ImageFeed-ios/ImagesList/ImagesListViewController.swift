@@ -69,7 +69,7 @@ extension ImagesListViewController: UITableViewDataSource {
         imageListCell.delegate = self
         
         let photo = photos[indexPath.row]
-        let statusOfConfiguringCell = imageListCell.configCell(using: photo.thumbImageURL, with: indexPath)
+        let statusOfConfiguringCell = imageListCell.configCell(using: photo.thumbImageURL, with: indexPath, date: photo.createdAt)
         imageListCell.setIsLiked(photo.isLiked)
         if statusOfConfiguringCell {
             tableView.reloadRows(at: [indexPath], with: .automatic)

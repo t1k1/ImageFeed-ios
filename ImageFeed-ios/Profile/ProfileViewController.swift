@@ -16,7 +16,7 @@ final class ProfileViewController: UIViewController {
         static let main = "Main"
         static let logoutImageName = "logout_image"
         static let systemLogoutImageName = "ipad.and.arrow.forward"
-        static let logOutActionName = "logOut"
+        static let logOutActionName = "showAlert"
         static let systemAvatarImageName = "person.crop.circle.fill"
         static let avatarPlaceholderImageName = "avatar_placeholder"
         static let authViewControllerName = "AuthViewController"
@@ -28,6 +28,7 @@ final class ProfileViewController: UIViewController {
     private var profileImageServiceObserver: NSObjectProtocol?
     private let translucentGradient = TranslucentGradient()
     private var animationLayers = Set<CALayer>()
+    private var alertPresenter: AlertPresenter?
     
     //MARK: - Layout variables
     private let descriptionLabel: UILabel = {
@@ -61,17 +62,6 @@ final class ProfileViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(image, for: .normal)
         
-        if #available(iOS 14.0, *) {
-            let logOutAction = UIAction(title: Keys.logOutActionName) { (ACTION) in
-                logOut()
-            }
-            button.addAction(logOutAction, for: .touchUpInside)
-        } else {
-            button.addTarget(ProfileViewController.self,
-                             action: #selector(didTapButton),
-                             for: .touchUpInside)
-        }
-        
         return button
     }()
     private let avatarImageView: UIImageView = {
@@ -86,9 +76,13 @@ final class ProfileViewController: UIViewController {
     //MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-    
+        
         addSubViews()
         configureConstraints()
+        
+        alertPresenter = AlertPresenter(delagate: self)
+        addButtonAction()
+        
         addGradients()
         view.backgroundColor = .ypBlack
         updateProfileInfo(profile: profileServise.profile)
@@ -135,7 +129,22 @@ private extension ProfileViewController {
 private extension ProfileViewController {
     @objc
     func didTapButton() {
-        ProfileViewController.logOut()
+
+        let alert = AlertModel(title: "Пока, пока!",
+                               message: "Уверены что хотите выйти?",
+                               buttonText: "Да",
+                               completion: { [weak self] in
+            guard let self = self else { return }
+            self.logOut()
+        },
+                               secondButtonText: "Нет",
+                               secondCompletion: { [weak self] in
+            guard let self = self else { return }
+            
+            self.dismiss(animated: true)
+        })
+        
+        alertPresenter?.show(alert)
     }
     
     func updateProfileInfo(profile: Profile?) {
@@ -220,16 +229,51 @@ private extension ProfileViewController {
         }
     }
     
-    static func logOut() {
+    func addButtonAction() {
+        let alert = AlertModel(title: "Пока, пока!",
+                               message: "Уверены что хотите выйти?",
+                               buttonText: "Да",
+                               completion: { [weak self] in
+            guard let self = self else { return }
+            self.logOut()
+        },
+                               secondButtonText: "Нет",
+                               secondCompletion: { [weak self] in
+            guard let self = self else { return }
+            
+            self.dismiss(animated: true)
+        })
+        
+        if #available(iOS 14.0, *) {
+            let logOutAction = UIAction(title: Keys.logOutActionName) { [weak self] (ACTION) in
+                guard let self = self else { return }
+                self.alertPresenter?.show(alert)
+            }
+            logOutButton.addAction(logOutAction, for: .touchUpInside)
+        } else {
+            logOutButton.addTarget(ProfileViewController.self,
+                             action: #selector(didTapButton),
+                             for: .touchUpInside)
+        }
+    }
+    
+    func logOut() {
         OAuth2TokenStorage().token = nil
         WebViewViewController.cleanCookies()
-        
+
         guard let window = UIApplication.shared.windows.first else {
             assertionFailure("Invalid Configuration")
             return
         }
-        
+
         let authViewController = UIStoryboard(name: Keys.main, bundle: .main).instantiateViewController(withIdentifier: Keys.authViewControllerName)
         window.rootViewController = authViewController
+    }
+}
+
+//MARK: - AlertPresentableDelagate
+extension ProfileViewController: AlertPresentableDelagate {
+    func present(alert: UIAlertController, animated flag: Bool) {
+        self.present(alert, animated: flag)
     }
 }
