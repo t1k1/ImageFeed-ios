@@ -57,7 +57,6 @@ extension ImagesListViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: ImagesListCell.reuseIdentifier, for: indexPath)
         
         guard let imageListCell = cell as? ImagesListCell else {
-            print("ERROR! Ошибка привдения типов, создана пустая ячейка")
             return UITableViewCell()
         }
         

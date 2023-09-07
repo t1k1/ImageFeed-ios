@@ -44,17 +44,19 @@ final class ImagesListService {
                 switch result {
                     case .success(let body):
                         body.forEach { photo in
-                            self.photos.append(Photo(
-                                id: photo.id,
-                                size: CGSize(width: photo.width,
-                                             height: photo.height
-                                            ),
-                                createdAt: photo.createdAt?.stringToDate,
-                                welcomeDescription: photo.description,
-                                thumbImageURL: photo.urls.thumb,
-                                largeImageURL: photo.urls.full,
-                                isLiked: photo.likedByUser
-                            )
+                            self.photos.append(
+                                Photo(
+                                    id: photo.id,
+                                    size: CGSize(
+                                        width: photo.width,
+                                        height: photo.height
+                                    ),
+                                    createdAt: DateService.shared.dateFromString(str: photo.createdAt),
+                                    welcomeDescription: photo.description,
+                                    thumbImageURL: photo.urls.thumb,
+                                    largeImageURL: photo.urls.full,
+                                    isLiked: photo.likedByUser
+                                )
                             )
                         }
                         self.lastLoadedPage = nextPage
@@ -62,11 +64,12 @@ final class ImagesListService {
                             .post(
                                 name: ImagesListService.DidChangeNotification,
                                 object: self,
-                                userInfo: [Keys.photos: self.photos])
+                                userInfo: [Keys.photos: self.photos]
+                            )
                         
                         self.task = nil
-                    case .failure(let error):
-                        print("!ОШИБКА загрузки картинок \(error)")
+                    case .failure:
+                        assertionFailure("Failed to load images")
                 }
             }
         }
@@ -115,7 +118,6 @@ final class ImagesListService {
                         self.task = nil
                     case .failure(let error):
                         completion(.failure(error))
-                        print("!ОШИБКА в запросе лайка \(error)")
                 }
             }
         }

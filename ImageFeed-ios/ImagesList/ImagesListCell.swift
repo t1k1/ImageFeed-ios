@@ -36,12 +36,6 @@ final class ImagesListCell: UITableViewCell {
     weak var delegate: ImagesListCellDelegate?
     private let translucentGradient = TranslucentGradient()
     private var animationLayer: CALayer?
-    private let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .none
-        return formatter
-    }()
     
     //MARK: - Life cycle
     override func prepareForReuse() {
@@ -57,11 +51,7 @@ extension ImagesListCell {
     func configCell(using photoStringURL: String, with indexPath: IndexPath, date: Date?) -> Bool {
         gradientBackGroundFor(backgroundLabel)
         
-        if let date = date {
-            dateLabel.text = dateFormatter.string(from: date)
-        } else {
-            dateLabel.text = dateFormatter.string(from: Date())
-        }
+        dateLabel.text = DateService.shared.stringFromDate(date: date)
         
         var status = false
         
