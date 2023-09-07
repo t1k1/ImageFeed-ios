@@ -129,22 +129,7 @@ private extension ProfileViewController {
 private extension ProfileViewController {
     @objc
     func didTapButton() {
-
-        let alert = AlertModel(title: "Пока, пока!",
-                               message: "Уверены что хотите выйти?",
-                               buttonText: "Да",
-                               completion: { [weak self] in
-            guard let self = self else { return }
-            self.logOut()
-        },
-                               secondButtonText: "Нет",
-                               secondCompletion: { [weak self] in
-            guard let self = self else { return }
-            
-            self.dismiss(animated: true)
-        })
-        
-        alertPresenter?.show(alert)
+        showAlertBeforeExit()
     }
     
     func updateProfileInfo(profile: Profile?) {
@@ -189,8 +174,8 @@ private extension ProfileViewController {
     }
     
     func addGradients() {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
+//        DispatchQueue.main.async { [weak self] in
+//            guard let self = self else { return }
             let avatarGradient = translucentGradient.getGradient(
                 size: CGSize(
                     width: 70,
@@ -220,7 +205,7 @@ private extension ProfileViewController {
             ))
             loginNameLabel.layer.addSublayer(loginLabelGradient)
             animationLayers.insert(loginLabelGradient)
-        }
+//        }
     }
     
     func removeGradients() {
@@ -230,44 +215,50 @@ private extension ProfileViewController {
     }
     
     func addButtonAction() {
-        let alert = AlertModel(title: "Пока, пока!",
-                               message: "Уверены что хотите выйти?",
-                               buttonText: "Да",
-                               completion: { [weak self] in
-            guard let self = self else { return }
-            self.logOut()
-        },
-                               secondButtonText: "Нет",
-                               secondCompletion: { [weak self] in
-            guard let self = self else { return }
-            
-            self.dismiss(animated: true)
-        })
-        
         if #available(iOS 14.0, *) {
             let logOutAction = UIAction(title: Keys.logOutActionName) { [weak self] (ACTION) in
                 guard let self = self else { return }
-                self.alertPresenter?.show(alert)
+                self.showAlertBeforeExit()
             }
             logOutButton.addAction(logOutAction, for: .touchUpInside)
         } else {
             logOutButton.addTarget(ProfileViewController.self,
-                             action: #selector(didTapButton),
-                             for: .touchUpInside)
+                                   action: #selector(didTapButton),
+                                   for: .touchUpInside)
+        }
+    }
+    
+    func showAlertBeforeExit(){
+        DispatchQueue.main.async {
+            let alert = AlertModel(
+                title: "Пока, пока!",
+                message: "Уверены что хотите выйти?",
+                buttonText: "Да",
+                completion: { [weak self] in
+                    guard let self = self else { return }
+                    self.logOut()
+                },
+                secondButtonText: "Нет",
+                secondCompletion: { [weak self] in
+                    guard let self = self else { return }
+                    
+                    self.dismiss(animated: true)
+                })
+            
+            self.alertPresenter?.show(alert)
         }
     }
     
     func logOut() {
         OAuth2TokenStorage().token = nil
         WebViewViewController.cleanCookies()
-
+        
         guard let window = UIApplication.shared.windows.first else {
             assertionFailure("Invalid Configuration")
             return
         }
-
-        let authViewController = UIStoryboard(name: Keys.main, bundle: .main).instantiateViewController(withIdentifier: Keys.authViewControllerName)
-        window.rootViewController = authViewController
+        
+        window.rootViewController = SplashViewController()
     }
 }
 

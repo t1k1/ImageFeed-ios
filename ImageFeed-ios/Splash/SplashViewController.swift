@@ -62,8 +62,9 @@ extension SplashViewController: AuthViewControllerDelegate{
     private func switchToAuthViewController() {
         let storyboard = UIStoryboard(name: Keys.main, bundle: .main)
         authViewController = storyboard.instantiateViewController(withIdentifier: Keys.authViewControllerID) as? AuthViewController
-        authViewController?.delegate = self
+        
         guard let authViewController = authViewController else { return }
+        authViewController.delegate = self
         
         authViewController.modalPresentationStyle = .fullScreen
         present(authViewController, animated: true)

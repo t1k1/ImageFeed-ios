@@ -40,6 +40,7 @@ final class WebViewViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        alertPresenter = AlertPresenter(delagate: self)
         addEstimatedProgressObservtion()
         webView.navigationDelegate = self
         loadWebView()
@@ -100,11 +101,15 @@ extension WebViewViewController {
     }
     static func cleanCookies() {
         HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
-        WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
-            records.forEach { record in
-                WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
+        WKWebsiteDataStore.default().fetchDataRecords(
+            ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
+                records.forEach { record in
+                    WKWebsiteDataStore.default().removeData(
+                        ofTypes: record.dataTypes,
+                        for: [record],
+                        completionHandler: {})
+                }
             }
-        }
     }
 }
 
@@ -138,7 +143,6 @@ extension WebViewViewController {
             dismiss(animated: true)
         })
         
-        alertPresenter = AlertPresenter(delagate: self)
         alertPresenter?.show(alert)
     }
 }

@@ -34,7 +34,7 @@ final class ProfileImageService {
         _ completion: @escaping (Result<String, Error>) -> Void
     ){
         assert(Thread.isMainThread)
-        if avatarURL != nil { return }
+        if task != nil { return }
         task?.cancel()
         
         var requestImage = profileImageURLRequest(userName: username)

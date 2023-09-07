@@ -32,7 +32,7 @@ final class ProfileService {
         completion: @escaping (Result<Profile, Error>) -> Void
     ) {
         assert(Thread.isMainThread)
-        if profile != nil { return }
+        if task != nil { return }
         task?.cancel()
         
         var requestProfile = selfProfileRequest
