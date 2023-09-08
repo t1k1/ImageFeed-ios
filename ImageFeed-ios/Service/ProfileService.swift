@@ -8,11 +8,7 @@
 import Foundation
 
 final class ProfileService {
-    //MARK: - Variables
-    static let shared = ProfileService()
-    private let urlSession = URLSession.shared
-    private var task: URLSessionTask?
-    private(set) var profile: Profile?
+    //MARK: - Structure of string variables
     private struct Keys {
         static let authorization = "Authorization"
         static let bearer = "Bearer"
@@ -20,6 +16,12 @@ final class ProfileService {
         static let nilLastName = ""
         static let httpMethodGet = "GET"
     }
+    
+    //MARK: - Variables
+    static let shared = ProfileService()
+    private let urlSession = URLSession.shared
+    private var task: URLSessionTask?
+    private(set) var profile: Profile?
     
     //MARK: - Initialization
     private init() { }
@@ -30,7 +32,7 @@ final class ProfileService {
         completion: @escaping (Result<Profile, Error>) -> Void
     ) {
         assert(Thread.isMainThread)
-        if profile != nil { return }
+        if task != nil { return }
         task?.cancel()
         
         var requestProfile = selfProfileRequest
@@ -70,7 +72,6 @@ final class ProfileService {
 
 //MARK: - Private functions
 private extension ProfileService {    
-    /// Вспомогательная функция для получения своего профиля
     var selfProfileRequest: URLRequest? {
         URLRequest.makeHTTPRequest(path: "/me", httpMethod: Keys.httpMethodGet)
     }
