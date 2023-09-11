@@ -31,12 +31,6 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
         delegate?.webViewViewControllerDidCancel(self)
     }
     
-    //MARK: - Structures of string variables
-    private struct WebConstants {
-        static let code = "code"
-        static let authPath = "/oauth/authorize/native"
-    }
-    
     //MARK: - Variables
     var presenter: WebViewPresenterProtocol?
     weak var delegate: WebViewViewControllerDelegate?
@@ -73,13 +67,8 @@ extension WebViewViewController: WKNavigationDelegate {
     }
     
     private func code(from navigationAction: WKNavigationAction) -> String? {
-        if let url = navigationAction.request.url,
-           let urlComponents = URLComponents(string: url.absoluteString),
-           urlComponents.path == WebConstants.authPath,
-           let items = urlComponents.queryItems,
-           let codeItem = items.first(where: { $0.name == WebConstants.code })
-        {
-            return codeItem.value
+        if let url = navigationAction.request.url {
+            return presenter?.code(from: url)
         } else {
             return nil
         }

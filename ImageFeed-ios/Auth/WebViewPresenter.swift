@@ -11,36 +11,23 @@ public protocol WebViewPresenterProtocol {
     var view: WebViewViewControllerProtocol? { get set }
     func viewDidLoad()
     func didUpdateProgressValue(_ newValue: Double)
+    func code(from url: URL) -> String?
 }
 
 final class WebViewPresenter: WebViewPresenterProtocol {
-    private struct WebKeys {
-        static let clientId = "client_id"
-        static let redirectUri = "redirect_uri"
-        static let responseType = "response_type"
-        static let scope = "scope"
-    }
-    private struct WebConstants {
-        static let unsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
-        static let code = "code"
-    }
-    
     weak var view: WebViewViewControllerProtocol?
+    var authHelper: AuthHelperProtocol
+    
+    init(authHelper: AuthHelperProtocol) {
+        self.authHelper = authHelper
+    }
     
     func viewDidLoad() {
-        var urlComponents = URLComponents(string: WebConstants.unsplashAuthorizeURLString)
-        urlComponents?.queryItems = [
-            URLQueryItem(name: WebKeys.clientId, value: AccessKey),
-            URLQueryItem(name: WebKeys.redirectUri, value: RedirectURI),
-            URLQueryItem(name: WebKeys.responseType, value: WebConstants.code),
-            URLQueryItem(name: WebKeys.scope, value: AccessScope)
-        ]
-        guard let url = urlComponents?.url else { return }
-        let request = URLRequest(url: url)
-  
-        view?.addEstimatedProgressObservtion()
-        
+        let request = authHelper.authRequest()
+        guard let request = request else { return }
         view?.load(request: request)
+        
+        view?.addEstimatedProgressObservtion()
     }
     
     func didUpdateProgressValue(_ newValue: Double) {
@@ -53,5 +40,9 @@ final class WebViewPresenter: WebViewPresenterProtocol {
     
     func shouldHideProgress(for value: Float) -> Bool {
         abs(value - 1.0) <= 0.0001
+    }
+    
+    func code(from url: URL) -> String? {
+        authHelper.code(from: url)
     }
 }
