@@ -9,8 +9,7 @@ import UIKit
 import Kingfisher
 import WebKit
 
-public protocol ProfileViewControllerProtocol: AnyObject {
-    var presenter: ProfileViewPresenterProtocol? { get set }
+protocol ProfileViewControllerProtocol: AnyObject {
     func addButtonActionBeforeIos14(action: Selector)
     @available(iOS 14.0, *) func addButtonActionAfterIos14(logOutAction: UIAction)
     func showAlertBeforeExit()
@@ -33,7 +32,12 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
     private let translucentGradient = TranslucentGradient()
     private var animationLayers = Set<CALayer>()
     private var alertPresenter: AlertPresenter?
-    var presenter: ProfileViewPresenterProtocol?
+    private var presenter: ProfileViewPresenterProtocol?
+    
+    func configure(_ presenter: ProfileViewPresenterProtocol) {
+        self.presenter = presenter
+        self.presenter?.view = self
+    }
     
     //MARK: - Layout variables
     private let descriptionLabel: UILabel = {

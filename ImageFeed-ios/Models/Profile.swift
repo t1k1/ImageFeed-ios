@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Profile {
+struct Profile {
     let username: String
     let name: String
     var loginName: String {
