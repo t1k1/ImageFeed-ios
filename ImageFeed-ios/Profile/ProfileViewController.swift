@@ -68,6 +68,7 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
         let image = UIImage(named: Keys.logoutImageName) ?? UIImage(systemName: Keys.systemLogoutImageName)!
         
         let button = UIButton(type: .custom)
+        button.accessibilityIdentifier = "logOutButton"
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(image, for: .normal)
         
