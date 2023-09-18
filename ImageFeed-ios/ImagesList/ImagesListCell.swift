@@ -11,7 +11,7 @@ protocol ImagesListCellDelegate: AnyObject {
     func imageListCellDidTapLike(_ cell: ImagesListCell)
 }
 
-final class ImagesListCell: UITableViewCell {
+public final class ImagesListCell: UITableViewCell {
     //MARK: - Outltes
     @IBOutlet private weak var backgroundLabel: UILabel!
     @IBOutlet private weak var likeButton: UIButton!
@@ -38,7 +38,7 @@ final class ImagesListCell: UITableViewCell {
     private var animationLayer: CALayer?
     
     //MARK: - Life cycle
-    override func prepareForReuse() {
+    public override func prepareForReuse() {
         super.prepareForReuse()
         
         removeGradient()

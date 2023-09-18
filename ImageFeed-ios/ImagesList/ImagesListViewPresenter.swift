@@ -8,13 +8,13 @@
 import Foundation
 import UIKit
 
-protocol ImagesListViewPresenterProtocol {
+public protocol ImagesListViewPresenterProtocol {
     var view: ImagesListViewControllerProtocol? { get set }
     func configureImageList()
     func updateTableView()
     func getLargeImageURL(from indexPath: IndexPath) -> URL?
     func getPhotosCount() -> Int
-    func getPhoto(indexPath: IndexPath) -> Photo
+    func getPhoto(indexPath: IndexPath) -> Photo?
     func fetchPhotosNextPage(indexPath: IndexPath)
     func changeLike(indexPath: IndexPath?, cell: ImagesListCell)
     func getCellHeight(indexPath: IndexPath, tableViewWidth: CGFloat) -> CGFloat
@@ -52,7 +52,7 @@ final class ImagesListViewPresenter: ImagesListViewPresenterProtocol {
         return photos.count
     }
     
-    func getPhoto(indexPath: IndexPath) -> Photo {
+    func getPhoto(indexPath: IndexPath) -> Photo? {
         return photos[indexPath.row]
     }
     

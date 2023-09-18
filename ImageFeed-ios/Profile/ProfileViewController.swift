@@ -9,7 +9,7 @@ import UIKit
 import Kingfisher
 import WebKit
 
-protocol ProfileViewControllerProtocol: AnyObject {
+public protocol ProfileViewControllerProtocol: AnyObject {
     func addButtonActionBeforeIos14(action: Selector)
     @available(iOS 14.0, *) func addButtonActionAfterIos14(logOutAction: UIAction)
     func showAlertBeforeExit()

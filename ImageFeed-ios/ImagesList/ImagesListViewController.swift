@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol ImagesListViewControllerProtocol: AnyObject {
+public protocol ImagesListViewControllerProtocol: AnyObject {
     func configureImageList()
     func updateTableViewAnimated(oldCount: Int, newCount: Int)
     func showError()
@@ -34,7 +34,7 @@ final class ImagesListViewController: UIViewController & ImagesListViewControlle
         super.viewDidLoad()
         
         alertPresenter = AlertPresenter(delagate: self)
-        tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
+        tableView?.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
         presenter?.configureImageList()
     }
     
@@ -76,8 +76,10 @@ extension ImagesListViewController: UITableViewDataSource {
         
         imageListCell.delegate = self
         
-        guard let presenter = presenter else { return UITableViewCell() }
-        let photo = presenter.getPhoto(indexPath: indexPath)
+        guard let presenter = presenter,
+              let photo = presenter.getPhoto(indexPath: indexPath) else {
+            return UITableViewCell()
+        }
         
         let statusOfConfiguringCell = imageListCell.configCell(using: photo.thumbImageURL, with: indexPath, date: photo.createdAt)
         imageListCell.setIsLiked(photo.isLiked)

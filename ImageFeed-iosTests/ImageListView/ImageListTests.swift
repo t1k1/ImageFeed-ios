@@ -9,7 +9,13 @@
 import XCTest
 
 final class ImageListTests: XCTestCase {
-    func testSmth() {
+    func testImageListCallsViewDidLoad() {
+        let imageListViewController = ImagesListViewController()
+        let imageListViewPresenter = ImageListPresenterSpy()
+        imageListViewController.configure(imageListViewPresenter)
         
+        _ = imageListViewController.view
+        
+        XCTAssertTrue(imageListViewPresenter.configureImageListCalled)
     }
 }
