@@ -70,7 +70,7 @@ final class ProfileService {
     }
 }
 
-//MARK: - Private functions
+//MARK: - Functions for requests
 private extension ProfileService {    
     var selfProfileRequest: URLRequest? {
         URLRequest.makeHTTPRequest(path: "/me", httpMethod: Keys.httpMethodGet)

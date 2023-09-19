@@ -9,26 +9,38 @@ import UIKit
 import Kingfisher
 import WebKit
 
-final class ProfileViewController: UIViewController {
+public protocol ProfileViewControllerProtocol: AnyObject {
+    func addButtonActionBeforeIos14(action: Selector)
+    @available(iOS 14.0, *) func addButtonActionAfterIos14(logOutAction: UIAction)
+    func showAlertBeforeExit()
+    func logOut(window: UIWindow)
+    func updateProfileInfo(profile: Profile?)
+    func updateAvatar(url: URL, placeholder: UIImage)
+}
+
+final class ProfileViewController: UIViewController & ProfileViewControllerProtocol {
     
     //MARK: - Structure of string variables
     private struct Keys {
-        static let main = "Main"
         static let logoutImageName = "logout_image"
         static let systemLogoutImageName = "ipad.and.arrow.forward"
-        static let logOutActionName = "showAlert"
         static let systemAvatarImageName = "person.crop.circle.fill"
-        static let avatarPlaceholderImageName = "avatar_placeholder"
-        static let authViewControllerName = "AuthViewController"
+        static let loginNameId = "loginNameLabel"
+        static let nameId = "nameLabel"
+        static let buttonId = "logOutButton"
     }
     
     //MARK: - Variables
-    private let profileServise = ProfileService.shared
-    private let profileImageService = ProfileImageService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
     private let translucentGradient = TranslucentGradient()
     private var animationLayers = Set<CALayer>()
     private var alertPresenter: AlertPresenter?
+    private var presenter: ProfileViewPresenterProtocol?
+    
+    func configure(_ presenter: ProfileViewPresenterProtocol) {
+        self.presenter = presenter
+        self.presenter?.view = self
+    }
     
     //MARK: - Layout variables
     private let descriptionLabel: UILabel = {
@@ -44,6 +56,7 @@ final class ProfileViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 13, weight: .regular)
         label.textColor = .ypGray
+        label.accessibilityIdentifier = Keys.loginNameId
         
         return label
     }()
@@ -52,6 +65,7 @@ final class ProfileViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 23, weight: .bold)
         label.textColor = .ypWhite
+        label.accessibilityIdentifier = Keys.nameId
         
         return label
     }()
@@ -59,6 +73,7 @@ final class ProfileViewController: UIViewController {
         let image = UIImage(named: Keys.logoutImageName) ?? UIImage(systemName: Keys.systemLogoutImageName)!
         
         let button = UIButton(type: .custom)
+        button.accessibilityIdentifier = Keys.buttonId
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(image, for: .normal)
         
@@ -77,16 +92,14 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        alertPresenter = AlertPresenter(delagate: self)
+        
+        view.backgroundColor = .ypBlack
         addSubViews()
         configureConstraints()
-        
-        alertPresenter = AlertPresenter(delagate: self)
-        addButtonAction()
-        
         addGradients()
-        view.backgroundColor = .ypBlack
-        updateProfileInfo(profile: profileServise.profile)
         
+        presenter?.viewDidLoad()
     }
 }
 
@@ -126,12 +139,7 @@ private extension ProfileViewController {
 }
 
 //MARK: - Functions
-private extension ProfileViewController {
-    @objc
-    func didTapButton() {
-        showAlertBeforeExit()
-    }
-    
+extension ProfileViewController {
     func updateProfileInfo(profile: Profile?) {
         guard let profile = profile else { return }
         nameLabel.text = profile.name
@@ -144,23 +152,16 @@ private extension ProfileViewController {
             queue: .main
         ) { [weak self] _ in
             guard let self = self else { return }
-            self.updateAvatar()
+            self.presenter?.updateAvatar()
         }
-        updateAvatar()
+        presenter?.updateAvatar()
     }
     
-    func updateAvatar() {
-        guard
-            let avatarURL = profileImageService.avatarURL,
-            let url = URL(string: avatarURL)
-        else { return }
-        
-        let avatarPlaceholderImage = UIImage(named: Keys.avatarPlaceholderImageName)
-        
+    func updateAvatar(url: URL, placeholder: UIImage) {
         avatarImageView.kf.indicatorType = .activity
         avatarImageView.kf.setImage(
             with: url,
-            placeholder: avatarPlaceholderImage
+            placeholder: placeholder
         ) { [weak self] result in
             guard let self = self else { return }
             switch result {
@@ -168,44 +169,41 @@ private extension ProfileViewController {
                     self.removeGradients()
                 case .failure:
                     self.removeGradients()
-                    avatarImageView.image = avatarPlaceholderImage
+                    avatarImageView.image = placeholder
             }
         }
     }
     
     func addGradients() {
-//        DispatchQueue.main.async { [weak self] in
-//            guard let self = self else { return }
-            let avatarGradient = translucentGradient.getGradient(
-                size: CGSize(
-                    width: 70,
-                    height: 70
-                ),
-                cornerRadius: avatarImageView.layer.cornerRadius)
-            avatarImageView.layer.addSublayer(avatarGradient)
-            animationLayers.insert(avatarGradient)
-            
-            let nameLabelGradient = translucentGradient.getGradient(size: CGSize(
-                width: nameLabel.bounds.width,
-                height: nameLabel.bounds.height
-            ))
-            nameLabel.layer.addSublayer(nameLabelGradient)
-            animationLayers.insert(nameLabelGradient)
-            
-            let descriptionLabelGradient = translucentGradient.getGradient(size: CGSize(
-                width: descriptionLabel.bounds.width,
-                height: descriptionLabel.bounds.height
-            ))
-            descriptionLabel.layer.addSublayer(descriptionLabelGradient)
-            animationLayers.insert(descriptionLabelGradient)
-            
-            let loginLabelGradient = translucentGradient.getGradient(size: CGSize(
-                width: loginNameLabel.bounds.width,
-                height: loginNameLabel.bounds.height
-            ))
-            loginNameLabel.layer.addSublayer(loginLabelGradient)
-            animationLayers.insert(loginLabelGradient)
-//        }
+        let avatarGradient = translucentGradient.getGradient(
+            size: CGSize(
+                width: 70,
+                height: 70
+            ),
+            cornerRadius: avatarImageView.layer.cornerRadius)
+        avatarImageView.layer.addSublayer(avatarGradient)
+        animationLayers.insert(avatarGradient)
+        
+        let nameLabelGradient = translucentGradient.getGradient(size: CGSize(
+            width: nameLabel.bounds.width,
+            height: nameLabel.bounds.height
+        ))
+        nameLabel.layer.addSublayer(nameLabelGradient)
+        animationLayers.insert(nameLabelGradient)
+        
+        let descriptionLabelGradient = translucentGradient.getGradient(size: CGSize(
+            width: descriptionLabel.bounds.width,
+            height: descriptionLabel.bounds.height
+        ))
+        descriptionLabel.layer.addSublayer(descriptionLabelGradient)
+        animationLayers.insert(descriptionLabelGradient)
+        
+        let loginLabelGradient = translucentGradient.getGradient(size: CGSize(
+            width: loginNameLabel.bounds.width,
+            height: loginNameLabel.bounds.height
+        ))
+        loginNameLabel.layer.addSublayer(loginLabelGradient)
+        animationLayers.insert(loginLabelGradient)
     }
     
     func removeGradients() {
@@ -214,18 +212,17 @@ private extension ProfileViewController {
         }
     }
     
-    func addButtonAction() {
-        if #available(iOS 14.0, *) {
-            let logOutAction = UIAction(title: Keys.logOutActionName) { [weak self] (ACTION) in
-                guard let self = self else { return }
-                self.showAlertBeforeExit()
-            }
-            logOutButton.addAction(logOutAction, for: .touchUpInside)
-        } else {
-            logOutButton.addTarget(ProfileViewController.self,
-                                   action: #selector(didTapButton),
-                                   for: .touchUpInside)
-        }
+    func addButtonActionBeforeIos14(action: Selector) {
+        logOutButton.addTarget(
+            ProfileViewController.self,
+            action: action,
+            for: .touchUpInside
+        )
+    }
+    
+    @available(iOS 14.0, *)
+    func addButtonActionAfterIos14(logOutAction: UIAction) {
+        logOutButton.addAction(logOutAction, for: .touchUpInside)
     }
     
     func showAlertBeforeExit(){
@@ -236,7 +233,7 @@ private extension ProfileViewController {
                 buttonText: "Да",
                 completion: { [weak self] in
                     guard let self = self else { return }
-                    self.logOut()
+                    self.presenter?.logOut()
                 },
                 secondButtonText: "Нет",
                 secondCompletion: { [weak self] in
@@ -249,15 +246,7 @@ private extension ProfileViewController {
         }
     }
     
-    func logOut() {
-        OAuth2TokenStorage().token = nil
-        WebViewViewController.cleanCookies()
-        
-        guard let window = UIApplication.shared.windows.first else {
-            assertionFailure("Invalid Configuration")
-            return
-        }
-        
+    func logOut(window: UIWindow) {
         window.rootViewController = SplashViewController()
     }
 }

@@ -73,7 +73,7 @@ final class ProfileImageService {
     }
 }
 
-//MARK: - Private functions
+//MARK: - Functions for requests
 private extension ProfileImageService {    
     func profileImageURLRequest(userName: String) -> URLRequest? {
         URLRequest.makeHTTPRequest(
