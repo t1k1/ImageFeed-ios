@@ -104,7 +104,15 @@ extension ImagesListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         guard let presenter = presenter else { return CGFloat() }
         
-        return presenter.getCellHeight(indexPath: indexPath, tableViewWidth: tableView.bounds.width)
+        let imageInsets = UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16)
+        return presenter.getCellHeight(
+            indexPath: indexPath,
+            tableViewWidth: tableView.bounds.width,
+            imageInsetsLeft: imageInsets.left,
+            imageInsetsRight: imageInsets.right,
+            imageInsetsTop: imageInsets.top,
+            imageInsetsBottom: imageInsets.bottom
+        )
     }
 }
 

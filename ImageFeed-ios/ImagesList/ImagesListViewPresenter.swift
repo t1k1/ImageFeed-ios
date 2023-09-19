@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import UIKit
 
 public protocol ImagesListViewPresenterProtocol {
     var view: ImagesListViewControllerProtocol? { get set }
@@ -17,12 +16,18 @@ public protocol ImagesListViewPresenterProtocol {
     func getPhoto(indexPath: IndexPath) -> Photo?
     func fetchPhotosNextPage(indexPath: IndexPath)
     func changeLike(indexPath: IndexPath?, cell: ImagesListCell)
-    func getCellHeight(indexPath: IndexPath, tableViewWidth: CGFloat) -> CGFloat
+    func getCellHeight(indexPath: IndexPath,
+                       tableViewWidth: CGFloat,
+                       imageInsetsLeft: CGFloat,
+                       imageInsetsRight: CGFloat,
+                       imageInsetsTop: CGFloat,
+                       imageInsetsBottom: CGFloat
+    ) -> CGFloat
 }
 
 final class ImagesListViewPresenter: ImagesListViewPresenterProtocol {
     //MARK: - Variables
-    var view: ImagesListViewControllerProtocol?
+    weak var view: ImagesListViewControllerProtocol?
     private var imagesListService: ImagesListService?
     private var photos: [Photo] = []
     
@@ -92,14 +97,20 @@ final class ImagesListViewPresenter: ImagesListViewPresenterProtocol {
         }
     }
     
-    func getCellHeight(indexPath: IndexPath, tableViewWidth: CGFloat) -> CGFloat {
+    func getCellHeight(
+        indexPath: IndexPath,
+        tableViewWidth: CGFloat,
+        imageInsetsLeft: CGFloat,
+        imageInsetsRight: CGFloat,
+        imageInsetsTop: CGFloat,
+        imageInsetsBottom: CGFloat
+    ) -> CGFloat {
         let image = photos[indexPath.row]
         
-        let imageInsets = UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16)
-        let imageViewWidth = tableViewWidth - imageInsets.left - imageInsets.right
+        let imageViewWidth = tableViewWidth - imageInsetsLeft - imageInsetsRight
         let imageWidth = image.size.width
         let scale = imageViewWidth / imageWidth
-        let cellHeight = image.size.height * scale + imageInsets.top + imageInsets.bottom
+        let cellHeight = image.size.height * scale + imageInsetsTop + imageInsetsBottom
         return cellHeight
     }
 }

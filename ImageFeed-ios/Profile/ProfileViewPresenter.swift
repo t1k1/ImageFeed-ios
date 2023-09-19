@@ -17,7 +17,7 @@ public protocol ProfileViewPresenterProtocol {
 
 final class ProfileViewPresenter: ProfileViewPresenterProtocol {
     //MARK: - Variables
-    var view: ProfileViewControllerProtocol?
+    weak var view: ProfileViewControllerProtocol?
     private let profileServise = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
     
