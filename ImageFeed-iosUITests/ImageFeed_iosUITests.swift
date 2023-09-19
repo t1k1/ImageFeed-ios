@@ -1,4 +1,5 @@
 import XCTest
+import ImageFeed_ios
 
 class Image_FeedUITests: XCTestCase {
     private let app = XCUIApplication()
@@ -18,7 +19,7 @@ class Image_FeedUITests: XCTestCase {
         XCTAssertTrue(loginTextField.waitForExistence(timeout: 5))
         
         loginTextField.tap()
-        loginTextField.typeText("login")
+        loginTextField.typeText("yourLogin")
         webView.tap()
         webView.swipeUp()
 
@@ -26,7 +27,7 @@ class Image_FeedUITests: XCTestCase {
         XCTAssertTrue(passwordTextField.waitForExistence(timeout: 5))
         
         passwordTextField.tap()
-        passwordTextField.typeText("password")
+        passwordTextField.typeText("yourPassword")
         webView.tap()
         webView.swipeUp()
 
@@ -35,7 +36,7 @@ class Image_FeedUITests: XCTestCase {
         let tablesQuery = app.tables
         let cell = tablesQuery.children(matching: .cell).element(boundBy: 0)
 
-        XCTAssertTrue(cell.waitForExistence(timeout: 5))
+        XCTAssertTrue(cell.waitForExistence(timeout: 8))
     }
     
     func testFeed() throws {
@@ -43,12 +44,12 @@ class Image_FeedUITests: XCTestCase {
         let firstCell = tablesQuery.children(matching: .cell).element(boundBy: 0)
         firstCell.swipeUp()
         sleep(3)
-        let secondCell = tablesQuery.children(matching: .cell).element(boundBy: 3)
-        secondCell.buttons["LikeButton"].tap()
+        let anotherCell = tablesQuery.children(matching: .cell).element(boundBy: 3)
+        anotherCell.buttons["LikeButton"].tap()
         sleep(8)
-        secondCell.buttons["LikeButton"].tap()
+        anotherCell.buttons["LikeButton"].tap()
         sleep(8)
-        secondCell.tap()
+        anotherCell.tap()
         let image = app.scrollViews.images.element(boundBy: 0)
         XCTAssertTrue(image.waitForExistence(timeout: 5))
         image.pinch(withScale: 3, velocity: 1)
