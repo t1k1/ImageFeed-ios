@@ -63,7 +63,7 @@ final class OAuth2Service {
     }
 }
 
-//MARK: - Private functions
+//MARK: - Functions for requests
 private extension OAuth2Service {    
     func authTokenRequest(code: String) -> URLRequest? {
         URLRequest.makeHTTPRequest(
@@ -77,5 +77,4 @@ private extension OAuth2Service {
             baseURL: URL(string: "https://unsplash.com")
         )
     }
-    
 }

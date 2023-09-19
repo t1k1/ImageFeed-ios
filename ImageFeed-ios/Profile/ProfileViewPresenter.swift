@@ -16,10 +16,12 @@ public protocol ProfileViewPresenterProtocol {
 }
 
 final class ProfileViewPresenter: ProfileViewPresenterProtocol {
+    //MARK: - Variables
     var view: ProfileViewControllerProtocol?
     private let profileServise = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
     
+    //MARK: - Functions
     func viewDidLoad() {
         addButtonAction()
         updateProfileInfo()
@@ -49,6 +51,7 @@ final class ProfileViewPresenter: ProfileViewPresenterProtocol {
     }
 }
 
+//MARK: - Private functions
 private extension ProfileViewPresenter {
     func addButtonAction() {
         if #available(iOS 14.0, *) {
@@ -63,7 +66,7 @@ private extension ProfileViewPresenter {
     }
     
     @objc
-    private func didTapButton() {
+    func didTapButton() {
         view?.showAlertBeforeExit()
     }
     

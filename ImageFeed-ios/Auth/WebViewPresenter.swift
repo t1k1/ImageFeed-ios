@@ -15,13 +15,16 @@ public protocol WebViewPresenterProtocol {
 }
 
 final class WebViewPresenter: WebViewPresenterProtocol {
+    //MARK: - Variables
     weak var view: WebViewViewControllerProtocol?
     var authHelper: AuthHelperProtocol
     
+    //MARK: - Initialization
     init(authHelper: AuthHelperProtocol) {
         self.authHelper = authHelper
     }
     
+    //MARK: - Functions
     func viewDidLoad() {
         let request = authHelper.authRequest()
         guard let request = request else { return }

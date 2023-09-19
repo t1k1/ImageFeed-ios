@@ -8,6 +8,7 @@
 import Foundation
 
 class DateService {
+    //MARK: - Variables
     static let shared = DateService()
     
     private let dateFormatter: DateFormatter = {
@@ -16,12 +17,12 @@ class DateService {
         formatter.dateFormat = "d MMMM y"
         return formatter
     }()
-    
     private let dateFormatterIso = ISO8601DateFormatter()
     
     //MARK: - Initialization
     private init() { }
     
+    //MARK: - Transforming date
     func dateFromString(str: String?) -> Date {
         guard let str = str,
               let date = dateFormatterIso.date(from: str) else {

@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol AuthViewControllerDelegate: AnyObject {
+    func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String)
+}
+
 final class AuthViewController: UIViewController {
     //MARK: - Variables
     private let ShowWebViewSegueIdentifier = "ShowWebView"

@@ -21,10 +21,12 @@ public protocol ImagesListViewPresenterProtocol {
 }
 
 final class ImagesListViewPresenter: ImagesListViewPresenterProtocol {
+    //MARK: - Variables
     var view: ImagesListViewControllerProtocol?
     private var imagesListService: ImagesListService?
     private var photos: [Photo] = []
     
+    //MARK: - Functions
     func configureImageList() {
         imagesListService = ImagesListService()
         guard let imagesListService = imagesListService else { return }

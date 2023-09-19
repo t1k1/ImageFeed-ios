@@ -1,12 +1,12 @@
 import XCTest
 
 class Image_FeedUITests: XCTestCase {
-    private let app = XCUIApplication() // переменная приложения
+    private let app = XCUIApplication()
     
     override func setUpWithError() throws {
-        continueAfterFailure = false // настройка выполнения тестов, которая прекратит выполнения тестов, если в тесте что-то пошло не так
+        continueAfterFailure = false
         
-        app.launch() // запускаем приложение перед каждым тестом
+        app.launch()
     }
     
     func testAuth() throws {
@@ -18,7 +18,7 @@ class Image_FeedUITests: XCTestCase {
         XCTAssertTrue(loginTextField.waitForExistence(timeout: 5))
         
         loginTextField.tap()
-        loginTextField.typeText("snzt1k1@gmail.com")
+        loginTextField.typeText("login")
         webView.tap()
         webView.swipeUp()
 
@@ -26,7 +26,7 @@ class Image_FeedUITests: XCTestCase {
         XCTAssertTrue(passwordTextField.waitForExistence(timeout: 5))
         
         passwordTextField.tap()
-        passwordTextField.typeText("1029384756")
+        passwordTextField.typeText("password")
         webView.tap()
         webView.swipeUp()
 
@@ -43,11 +43,11 @@ class Image_FeedUITests: XCTestCase {
         let firstCell = tablesQuery.children(matching: .cell).element(boundBy: 0)
         firstCell.swipeUp()
         sleep(3)
-        let secondCell = tablesQuery.children(matching: .cell).element(boundBy: 1)
+        let secondCell = tablesQuery.children(matching: .cell).element(boundBy: 3)
         secondCell.buttons["LikeButton"].tap()
-        sleep(5)
+        sleep(8)
         secondCell.buttons["LikeButton"].tap()
-        sleep(5)
+        sleep(8)
         secondCell.tap()
         let image = app.scrollViews.images.element(boundBy: 0)
         XCTAssertTrue(image.waitForExistence(timeout: 5))
@@ -60,8 +60,8 @@ class Image_FeedUITests: XCTestCase {
         sleep(3)
         app.tabBars.buttons.element(boundBy: 1).tap()
         
-        XCTAssertTrue(app.staticTexts["Aleksei Kolesnikov"].exists)
-        XCTAssertTrue(app.staticTexts["@t1k1"].exists)
+        XCTAssertTrue(app.staticTexts["loginNameLabel"].exists)
+        XCTAssertTrue(app.staticTexts["nameLabel"].exists)
         
         app.buttons["logOutButton"].tap()
         sleep(1)

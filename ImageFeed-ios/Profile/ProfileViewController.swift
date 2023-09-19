@@ -25,6 +25,9 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
         static let logoutImageName = "logout_image"
         static let systemLogoutImageName = "ipad.and.arrow.forward"
         static let systemAvatarImageName = "person.crop.circle.fill"
+        static let loginNameId = "loginNameLabel"
+        static let nameId = "nameLabel"
+        static let buttonId = "logOutButton"
     }
     
     //MARK: - Variables
@@ -53,6 +56,7 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 13, weight: .regular)
         label.textColor = .ypGray
+        label.accessibilityIdentifier = Keys.loginNameId
         
         return label
     }()
@@ -61,6 +65,7 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 23, weight: .bold)
         label.textColor = .ypWhite
+        label.accessibilityIdentifier = Keys.nameId
         
         return label
     }()
@@ -68,7 +73,7 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
         let image = UIImage(named: Keys.logoutImageName) ?? UIImage(systemName: Keys.systemLogoutImageName)!
         
         let button = UIButton(type: .custom)
-        button.accessibilityIdentifier = "logOutButton"
+        button.accessibilityIdentifier = Keys.buttonId
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(image, for: .normal)
         
